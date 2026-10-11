@@ -72,6 +72,11 @@ WebSocket, faked in tests), `MultiplayerHub` (host or join, tokens, the session 
   waiting screen says the server is waking up. 750 free instance hours a month cover one always-on service.
 - **Limits** (in `relay.mjs`): 300 rooms, 12 members per room, 30 connections per address, 2 MB per message, a message rate
   per connection (a flood closes it), and a page-origin allowlist (`ALLOWED_ORIGINS`).
+- **Capacity** (measured on a laptop, relay and 150 simulated players in 19 rooms of 8, messages of 300 bytes): 1 message per
+  player per second took 2.7 % of one CPU core, 5 per second 7.4 %, 20 per second 18.8 %; 70-80 MB of memory; a delay under
+  10 ms. A Render Starter instance (0.5 CPU) has room for far more than the 300 rooms the relay accepts; the cost to watch
+  is outbound bandwidth (about 1 GB an hour for 150 players at 1 message per second). Rooms live in the server's memory, so
+  run one instance only.
 
 ## Security: what is and is not protected
 
@@ -177,7 +182,7 @@ open the game with `?relay=ws://127.0.0.1:8787` (a desktop build reads the `RELA
 
 ## Known limits
 
-- Up to 8 players (4 per side); no spectators; no chat (quick emotes only).
+- Up to 12 players (6 per side); no spectators; no chat (quick emotes only).
 - Placement lasts at most 30 seconds (a fixed time): the host then starts the fight with the heroes where they stand.
 - The relay is one free Render instance: the first game after a quiet quarter of an hour waits up to a minute for it, and a
   restart of the service drops the rooms (players reconnect by themselves; an empty room is gone).
