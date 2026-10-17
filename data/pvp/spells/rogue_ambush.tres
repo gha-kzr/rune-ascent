@@ -23,5 +23,6 @@ script = ExtResource("6_ekokh")
 display_name = "Ambush"
 icon = ExtResource("5_defat")
 impact_delay = 0.3
+ap_cost = 1
 area = SubResource("Resource_14pj8")
 effects = Array[ExtResource("2_fr5vi")]([SubResource("Resource_p6otk")])

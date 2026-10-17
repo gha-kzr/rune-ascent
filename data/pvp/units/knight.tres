@@ -1,26 +1,25 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://nt5tutolr62s"]
 
-[ext_resource type="PackedScene" uid="uid://cxa5hbsvdr31l" path="res://assets/models/sword.tscn" id="1_c6xxq"]
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="2_bkkbf"]
-[ext_resource type="PackedScene" uid="uid://cg4mo7p0fvpte" path="res://assets/models/knight.tscn" id="3_tqf23"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="4_jypm5"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_srk7i"]
-[ext_resource type="Resource" uid="uid://cv2twow2ivll2" path="res://data/pvp/spells/knight_slash.tres" id="6_0ojqh"]
-[ext_resource type="Resource" uid="uid://dd3k3ymxkis8y" path="res://data/pvp/spells/knight_charge.tres" id="7_5vui4"]
-[ext_resource type="Resource" uid="uid://bbh384le8xm15" path="res://data/pvp/spells/knight_bash.tres" id="8_mr7id"]
-[ext_resource type="Resource" uid="uid://bwnx4m4r3k8lh" path="res://data/pvp/spells/knight_guard.tres" id="9_guxgh"]
-[ext_resource type="Resource" uid="uid://mivvoff1mbod" path="res://data/pvp/spells/knight_whirlwind.tres" id="10_to8xr"]
+[ext_resource type="PackedScene" uid="uid://cxa5hbsvdr31l" path="res://assets/models/sword.tscn" id="1_v80rg"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="2_c6xxq"]
+[ext_resource type="PackedScene" uid="uid://cg4mo7p0fvpte" path="res://assets/models/knight.tscn" id="3_bkkbf"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="4_tqf23"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_jypm5"]
+[ext_resource type="Resource" uid="uid://cv2twow2ivll2" path="res://data/pvp/spells/knight_slash.tres" id="6_srk7i"]
+[ext_resource type="Resource" uid="uid://mivvoff1mbod" path="res://data/pvp/spells/knight_whirlwind.tres" id="7_0ojqh"]
+[ext_resource type="Resource" uid="uid://dd3k3ymxkis8y" path="res://data/pvp/spells/knight_charge.tres" id="8_5vui4"]
+[ext_resource type="Resource" uid="uid://bbh384le8xm15" path="res://data/pvp/spells/knight_bash.tres" id="9_mr7id"]
 
 [resource]
-script = ExtResource("4_jypm5")
+script = ExtResource("4_tqf23")
 display_name = "Knight"
-max_hp = 180
-ap = 7
-mp = 4
-spells = Array[ExtResource("5_srk7i")]([ExtResource("6_0ojqh"), ExtResource("7_5vui4"), ExtResource("8_mr7id"), ExtResource("9_guxgh"), ExtResource("10_to8xr")])
+max_hp = 200
+ap = 2
+mp = 5
+spells = Array[ExtResource("5_jypm5")]([ExtResource("6_srk7i"), ExtResource("7_0ojqh"), ExtResource("8_5vui4"), ExtResource("9_mr7id")])
 color = Color(0.25, 0.45, 0.9, 1)
-model_scene = ExtResource("3_tqf23")
+model_scene = ExtResource("3_bkkbf")
 model_height = 1.45
-held_item = ExtResource("1_c6xxq")
+held_item = ExtResource("1_v80rg")
 held_item_bone = "Hand.R"
 held_item_rotation = Vector3(90, 0, 0)

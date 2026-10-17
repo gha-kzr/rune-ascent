@@ -1,22 +1,21 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bg8lyi7pvlnp6"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_4yiv5"]
-[ext_resource type="PackedScene" uid="uid://swuq6q0fw8k5" path="res://assets/models/necromancer.tscn" id="2_hekuj"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_1o28n"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_fy8uf"]
-[ext_resource type="Resource" uid="uid://dpnpchyo07leb" path="res://data/pvp/spells/necro_plague_bolt.tres" id="5_blgon"]
-[ext_resource type="Resource" uid="uid://8wlnkiyyxcn" path="res://data/pvp/spells/necro_rot.tres" id="6_qbogk"]
-[ext_resource type="Resource" uid="uid://bided3bxcmtut" path="res://data/pvp/spells/necro_miasma.tres" id="7_uxmpk"]
-[ext_resource type="Resource" uid="uid://hq27aggphst2" path="res://data/pvp/spells/necro_grasp.tres" id="8_jd1kx"]
-[ext_resource type="Resource" uid="uid://c7pk4cll55mmq" path="res://data/pvp/spells/necro_drain.tres" id="9_d244f"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_a3dv1"]
+[ext_resource type="PackedScene" uid="uid://swuq6q0fw8k5" path="res://assets/models/necromancer.tscn" id="2_4yiv5"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_hekuj"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_1o28n"]
+[ext_resource type="Resource" uid="uid://dpnpchyo07leb" path="res://data/pvp/spells/necro_plague_bolt.tres" id="5_fy8uf"]
+[ext_resource type="Resource" uid="uid://bided3bxcmtut" path="res://data/pvp/spells/necro_miasma.tres" id="6_blgon"]
+[ext_resource type="Resource" uid="uid://vdpv3j7ne8pd" path="res://data/pvp/spells/necro_soul_pull.tres" id="7_qbogk"]
+[ext_resource type="Resource" uid="uid://hq27aggphst2" path="res://data/pvp/spells/necro_grasp.tres" id="8_uxmpk"]
 
 [resource]
-script = ExtResource("3_1o28n")
+script = ExtResource("3_hekuj")
 display_name = "Necromancer"
 max_hp = 150
-ap = 7
+ap = 2
 mp = 4
-spells = Array[ExtResource("4_fy8uf")]([ExtResource("5_blgon"), ExtResource("6_qbogk"), ExtResource("7_uxmpk"), ExtResource("8_jd1kx"), ExtResource("9_d244f")])
+spells = Array[ExtResource("4_1o28n")]([ExtResource("5_fy8uf"), ExtResource("6_blgon"), ExtResource("7_qbogk"), ExtResource("8_uxmpk")])
 color = Color(0.45, 0.25, 0.55, 1)
-model_scene = ExtResource("2_hekuj")
+model_scene = ExtResource("2_4yiv5")
 model_height = 1.5

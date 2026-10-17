@@ -1,22 +1,21 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bwh7j0uj5jnoo"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_0dr2k"]
-[ext_resource type="PackedScene" uid="uid://cpks6vule3qgq" path="res://assets/models/priestess.tscn" id="2_px0mp"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_xtjo4"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_v2ogx"]
-[ext_resource type="Resource" uid="uid://bujex2wnqct0j" path="res://data/pvp/spells/priest_smite.tres" id="5_bjaqx"]
-[ext_resource type="Resource" uid="uid://bae5k5mpfbo36" path="res://data/pvp/spells/priest_heal.tres" id="6_jps0w"]
-[ext_resource type="Resource" uid="uid://gybdcxrdtqyf" path="res://data/pvp/spells/priest_rain.tres" id="7_xeqe8"]
-[ext_resource type="Resource" uid="uid://bi01ke7mkexe5" path="res://data/pvp/spells/priest_bless.tres" id="8_sp420"]
-[ext_resource type="Resource" uid="uid://bhp7wqv7ra5it" path="res://data/pvp/spells/priest_purify.tres" id="9_sfg51"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_fhhix"]
+[ext_resource type="PackedScene" uid="uid://cpks6vule3qgq" path="res://assets/models/priestess.tscn" id="2_0dr2k"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_px0mp"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_xtjo4"]
+[ext_resource type="Resource" uid="uid://bujex2wnqct0j" path="res://data/pvp/spells/priest_smite.tres" id="5_v2ogx"]
+[ext_resource type="Resource" uid="uid://dbnjjf4n0v8rl" path="res://data/pvp/spells/priest_radiance.tres" id="6_bjaqx"]
+[ext_resource type="Resource" uid="uid://cnx3een0a7y1a" path="res://data/pvp/spells/priest_rescue.tres" id="7_jps0w"]
+[ext_resource type="Resource" uid="uid://bae5k5mpfbo36" path="res://data/pvp/spells/priest_heal.tres" id="8_xeqe8"]
 
 [resource]
-script = ExtResource("3_xtjo4")
+script = ExtResource("3_px0mp")
 display_name = "Priestess"
 max_hp = 150
-ap = 7
+ap = 2
 mp = 4
-spells = Array[ExtResource("4_v2ogx")]([ExtResource("5_bjaqx"), ExtResource("6_jps0w"), ExtResource("7_xeqe8"), ExtResource("8_sp420"), ExtResource("9_sfg51")])
+spells = Array[ExtResource("4_xtjo4")]([ExtResource("5_v2ogx"), ExtResource("6_bjaqx"), ExtResource("7_jps0w"), ExtResource("8_xeqe8")])
 color = Color(0.95, 0.9, 0.6, 1)
-model_scene = ExtResource("2_px0mp")
+model_scene = ExtResource("2_0dr2k")
 model_height = 1.55

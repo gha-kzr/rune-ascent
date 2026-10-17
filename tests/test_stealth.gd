@@ -2,7 +2,7 @@ extends TestCase
 ## Stealth (the Rogue's Vanish): a hidden unit can't be picked as a target by the other team, the AI doesn't aim at
 ## it, it shows again when someone walks into it, attacks, or is hurt (standing next to it shows nothing), and its first
 ## strike hits harder.
-## Also the cleanse effect (the Priestess's Purify).
+## Also the cleanse effect.
 
 const STEALTH := "res://data/pvp/statuses/stealth.tres"
 
@@ -36,6 +36,14 @@ func test_a_hidden_unit_is_hidden_from_the_other_team_only_even_when_someone_is_
 	assert_true(state.is_hidden_from(state.units[0], UnitState.Team.ENEMY), "an enemy standing next to it still doesn't see it")
 	state.units[1].cell = Vector2i(2, 4)
 	assert_true(state.is_hidden_from(state.units[0], UnitState.Team.ENEMY), "nor two cells away")
+
+
+func _priestess_spell(name_text: String) -> int:
+	var unit := PvpHeroes.build(5)["unit"] as UnitData
+	for index in unit.spells.size():
+		if unit.spells[index].display_name == name_text:
+			return index
+	return -1
 
 
 func _knight_at(state: BattleState, knight_cell: Vector2i, rogue_cell: Vector2i) -> void:
@@ -151,6 +159,14 @@ func test_a_hidden_rogue_still_ambushes_from_next_to_an_enemy_that_cannot_see_he
 	assert_true(hp_before - state.units[1].hp > roundi(plain.average_roll() * 1.5), "the ambush bonus applied")
 
 
+func test_a_hidden_unit_does_not_block_line_of_sight() -> void:
+	var state := _duel()
+	_knight_at(state, Vector2i(2, 6), Vector2i(2, 4))  # The rogue between the knight and (2, 2).
+	assert_true(Targeting.has_line_of_sight(state, Vector2i(2, 6), Vector2i(2, 2)), "its shadow would give it away")
+	state.units[0].statuses.clear()
+	assert_false(Targeting.has_line_of_sight(state, Vector2i(2, 6), Vector2i(2, 2)), "once it shows, it blocks like any unit")
+
+
 func test_a_spell_that_needs_an_enemy_cannot_pick_a_hidden_one() -> void:
 	var state := _duel()
 	state.units[1].cell = Vector2i(2, 5)
@@ -225,8 +241,13 @@ func test_the_ai_does_not_aim_at_a_hidden_unit_and_does_when_it_shows() -> void:
 func test_a_cleanse_removes_harmful_statuses_and_keeps_the_helpful_ones() -> void:
 	var state := _duel(false)
 	var target := state.units[1]
-	target.add_status(load("res://data/pvp/statuses/plague.tres") as StatusData, 0)
-	target.add_status(load("res://data/pvp/statuses/blessed.tres") as StatusData, 0)
+	var harmful := StatusData.new()
+	harmful.duration = 2
+	var helpful := StatusData.new()
+	helpful.duration = 2
+	helpful.is_positive = true
+	target.add_status(harmful, 0)
+	target.add_status(helpful, 0)
 	var cleanse := CleanseEffect.new()
 	var events := cleanse.apply(state, 0, 1)
 	assert_eq(target.statuses.size(), 1)
@@ -263,7 +284,7 @@ func test_a_charge_cannot_be_aimed_at_a_hidden_unit() -> void:
 	var state := _duel()
 	state.units[1].cell = Vector2i(2, 8)  # In line with the rogue, hidden at (2, 2): 6 cells away.
 	state.units[0].cell = Vector2i(2, 6)
-	var charge := (PvpHeroes.build(0)["unit"] as UnitData).spells[1]
+	var charge := (PvpHeroes.build(0)["unit"] as UnitData).spells[_knight_spell("Charge")]
 	assert_false(Targeting.can_target(state, 1, charge, Vector2i(2, 6)), "a hidden unit can't be charged")
 	state.units[0].break_stealth()
 	assert_true(Targeting.can_target(state, 1, charge, Vector2i(2, 6)), "a visible one can")
@@ -286,33 +307,16 @@ func test_the_ambush_bonus_applies_on_a_real_cast_and_only_to_enemies() -> void:
 	assert_eq((spell.effects[0] as DamageEffect).target_filter, EffectData.TargetFilter.ENEMIES, "never her own team")
 
 
-func test_purify_cleanses_and_gives_back_the_action_points() -> void:
-	var state := _duel(false)
-	var priestess_spells := (PvpHeroes.build(5)["unit"] as UnitData).spells
-	var purify := priestess_spells[4]
-	var ally := state.units[0]
-	ally.add_status(load("res://data/pvp/statuses/drained.tres") as StatusData, 1)
-	var before := ally.ap
-	for effect in purify.effects:
-		effect.apply(state, 0, 0)
-	assert_eq(ally.statuses.size(), 0, "cleansed")
-	assert_true(ally.ap >= before + 1, "the lost action points are back (%d to %d)" % [before, ally.ap])
-
-
-func test_the_wraith_shrugs_off_physical_and_burns_in_holy_light() -> void:
+func test_no_class_resists_any_damage_in_multiplayer() -> void:
 	var state := _duel(false)
 	var wraith := PvpHeroes.build(7)["unit"] as UnitData
 	state.units[0] = UnitState.new(0, wraith, UnitState.Team.PLAYER, Vector2i(2, 2))
-	var physical := DamageEffect.new()
-	physical.min_amount = 100
-	physical.max_amount = 100
-	physical.damage_type = load("res://data/damage_types/physical.tres") as DamageType
-	var holy := DamageEffect.new()
-	holy.min_amount = 100
-	holy.max_amount = 100
-	holy.damage_type = load("res://data/damage_types/holy.tres") as DamageType
-	assert_true(physical.scaled(state, 1, 0, 100.0) < 40.0, "70% less physical")
-	assert_true(holy.scaled(state, 1, 0, 100.0) > 140.0, "50% more holy")
+	for type_name in ["physical", "holy", "fire", "frost", "poison"]:
+		var damage := DamageEffect.new()
+		damage.min_amount = 100
+		damage.max_amount = 100
+		damage.damage_type = load("res://data/damage_types/%s.tres" % type_name) as DamageType
+		assert_eq(damage.scaled(state, 1, 0, 100.0), 100.0, "%s: the type is only a look" % type_name)
 
 
 func test_healing_touch_cannot_be_aimed_at_the_priestess_herself() -> void:
@@ -322,7 +326,7 @@ func test_healing_touch_cannot_be_aimed_at_the_priestess_herself() -> void:
 	var state := PvpBattle.create(map, side_a, side_b, 5)
 	state.units[0].cell = Vector2i(2, 2)
 	state.units[1].cell = Vector2i(2, 4)
-	var heal := (PvpHeroes.build(5)["unit"] as UnitData).spells[1]
+	var heal := (PvpHeroes.build(5)["unit"] as UnitData).spells[_priestess_spell("Healing Touch")]
 	assert_false(Targeting.can_target(state, 0, heal, Vector2i(2, 2)), "not herself")
 	assert_true(Targeting.can_target(state, 0, heal, Vector2i(2, 4)), "an ally")
 

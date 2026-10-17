@@ -11,6 +11,8 @@ extends CanvasLayer
 signal spell_selected(index: int)
 ## Card combat: the player throws the card at this hand position away.
 signal card_discarded(position: int)
+## The spell under the mouse changed (null: none): one of the spell bar's (`on_bar`) or a row of the inspect card.
+signal spell_hovered(spell: SpellData, on_bar: bool)
 signal end_turn_pressed
 signal view_toggle_pressed
 ## The speed button was pressed: the controller cycles the battle speed.
@@ -83,6 +85,7 @@ func _ready() -> void:
 	_restart_button.pressed.connect(restart_pressed.emit)
 	_spell_bar.spell_pressed.connect(spell_selected.emit)
 	_spell_bar.discard_pressed.connect(card_discarded.emit)
+	_spell_bar.spell_hovered.connect(spell_hovered.emit)
 	_timeline.chip_hovered.connect(chip_hovered.emit)
 	_timeline.chip_unhovered.connect(chip_unhovered.emit)
 	_timeline.chip_pressed.connect(chip_pressed.emit)

@@ -20,6 +20,8 @@ static func of(state: BattleState) -> int:
 			spells.append("%s:%d" % [_name_of(spell), unit.cooldowns[spell]])
 		spells.sort()
 		line += " C" + ",".join(spells)
+		if unit.spirit:
+			line += " spirit"
 		if unit.card_mode:
 			line += " H%s D%s X%s r%d" % [unit.hand, unit.draw_pile, unit.discard_pile, unit.card_rng.state]
 		parts.append(line)

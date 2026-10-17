@@ -31,6 +31,9 @@ var cards := false
 ## multiplayer lobby chooses (EffectData.is_harmful).
 var friendly_fire := false
 var zone_enemy: Array[Vector2i] = []
+## Multiplayer spirits (a lobby rule): a unit that falls keeps its turns as a spirit with these spells
+## (UnitState.become_spirit). Empty: the fallen leave the turn order (solo, or the rule off).
+var spirit_kit: Array[SpellData] = []
 
 
 ## Places players in the map's player zone (Placement.default_cells: by role when the zone
@@ -161,6 +164,7 @@ func clone() -> BattleState:
 	copy.zone = zone.duplicate()
 	copy.pvp = pvp
 	copy.cards = cards
+	copy.spirit_kit = spirit_kit
 	copy.friendly_fire = friendly_fire
 	copy.zone_enemy = zone_enemy.duplicate()
 	copy.started = started

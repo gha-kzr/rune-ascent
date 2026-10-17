@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://bu4faj0hrg8pf"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_jj7g7"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_m88t4"]
+[ext_resource type="Script" uid="uid://pofmbja20q67" path="res://scripts/data/apply_status_effect.gd" id="3_chdcf"]
+[ext_resource type="Resource" uid="uid://cdpiqs8slec5d" path="res://data/pvp/statuses/cursed.tres" id="4_og7wx"]
+[ext_resource type="Texture2D" uid="uid://cynoa2qpwva7q" path="res://ui/icons/skull.svg" id="5_hvro2"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="6_v1rsf"]
+
+[sub_resource type="Resource" id="Resource_bgkvb"]
+script = ExtResource("1_jj7g7")
+
+[sub_resource type="Resource" id="Resource_7g155"]
+script = ExtResource("3_chdcf")
+status = ExtResource("4_og7wx")
+exclusive = true
+target_filter = 2
+
+[resource]
+script = ExtResource("6_v1rsf")
+display_name = "Curse"
+icon = ExtResource("5_hvro2")
+ap_cost = 1
+min_range = 0
+max_range = 99
+needs_line_of_sight = false
+target_unit = 1
+area = SubResource("Resource_bgkvb")
+effects = Array[ExtResource("2_m88t4")]([SubResource("Resource_7g155")])

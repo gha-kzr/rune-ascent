@@ -20,11 +20,14 @@ func _init() -> void:
 	for id: String in PvpClassSpecs.spells():
 		spell_files[id] = _build_spell(id, PvpClassSpecs.spells()[id], status_files)
 	var roster := PvpRoster.new()
+	for id: String in PvpClassSpecs.SPIRIT_SPELLS:
+		roster.spirit_spells.append(_build_spell(id, PvpClassSpecs.spirit_spells()[id], status_files))
 	var heroes := PvpClassSpecs.heroes()
 	for id in PvpClassSpecs.ORDER:
 		roster.heroes.append(_build_hero(id, heroes[id], spell_files))
 	_save(roster, "%s/roster.tres" % DIR)
-	print("Built %d statuses, %d spells, %d classes." % [status_files.size(), spell_files.size(), roster.heroes.size()])
+	print("Built %d statuses, %d spells, %d classes, %d spirit spells." % [status_files.size(), spell_files.size(), roster.heroes.size(),
+			roster.spirit_spells.size()])
 	var errors := roster.get_validation_errors()
 	for error in errors:
 		print("  problem: ", error)
@@ -94,7 +97,13 @@ func _effect(entry: Array, statuses: Dictionary) -> EffectData:
 			var apply := ApplyStatusEffect.new()
 			apply.status = statuses[entry[1]]
 			apply.target_filter = FILTERS[entry[2] if entry.size() > 2 else "all"]
+			var options: Dictionary = entry[3] if entry.size() > 3 else {}
+			apply.exclusive = options.get("exclusive", false)
 			return apply
+		"reveal":
+			var reveal := RevealEffect.new()
+			reveal.target_filter = FILTERS[entry[1] if entry.size() > 1 else "enemies"]
+			return reveal
 		"move":
 			var move := MoveEffect.new()
 			move.kind = MOVES[entry[1]]

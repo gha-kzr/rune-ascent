@@ -12,8 +12,8 @@ script = ExtResource("1_0ysdh")
 
 [sub_resource type="Resource" id="Resource_dmbmh"]
 script = ExtResource("4_ri1l4")
-min_amount = 12
-max_amount = 15
+min_amount = 14
+max_amount = 18
 damage_type = ExtResource("3_3y0kt")
 
 [resource]
@@ -21,6 +21,7 @@ script = ExtResource("6_3ytry")
 display_name = "Smite"
 icon = ExtResource("5_5sb2q")
 cast_animation = &"Attack"
+ap_cost = 1
 max_range = 4
 area = SubResource("Resource_bnrik")
 effects = Array[ExtResource("2_2k3ee")]([SubResource("Resource_dmbmh")])

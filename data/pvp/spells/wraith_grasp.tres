@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://cy7iansygi0pg"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_q8otd"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_8f4w5"]
+[ext_resource type="Resource" uid="uid://cgq03gsraslcu" path="res://data/damage_types/frost.tres" id="3_kfyl7"]
+[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_ftj7j"]
+[ext_resource type="Script" uid="uid://cq12oalhu55my" path="res://scripts/data/move_effect.gd" id="5_b3jlc"]
+[ext_resource type="Texture2D" uid="uid://cdtjkbbmblme1" path="res://ui/icons/grave_chill.svg" id="6_8bitl"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="7_rog0m"]
+
+[sub_resource type="Resource" id="Resource_fguoa"]
+script = ExtResource("1_q8otd")
+
+[sub_resource type="Resource" id="Resource_lvak5"]
+script = ExtResource("4_ftj7j")
+min_amount = 9
+max_amount = 12
+damage_type = ExtResource("3_kfyl7")
+target_filter = 2
+
+[sub_resource type="Resource" id="Resource_salb2"]
+script = ExtResource("5_b3jlc")
+kind = 4
+target_filter = 2
+
+[resource]
+script = ExtResource("7_rog0m")
+display_name = "Frozen Grasp"
+icon = ExtResource("6_8bitl")
+ap_cost = 1
+min_range = 2
+max_range = 5
+area = SubResource("Resource_fguoa")
+effects = Array[ExtResource("2_8f4w5")]([SubResource("Resource_lvak5"), SubResource("Resource_salb2")])

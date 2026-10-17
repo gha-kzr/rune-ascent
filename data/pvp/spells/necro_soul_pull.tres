@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://vdpv3j7ne8pd"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_vdm2a"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_yiahe"]
+[ext_resource type="Resource" uid="uid://bpx5i7f4hovmg" path="res://data/damage_types/poison.tres" id="3_0nc70"]
+[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_x0ve6"]
+[ext_resource type="Script" uid="uid://cq12oalhu55my" path="res://scripts/data/move_effect.gd" id="5_kfsyk"]
+[ext_resource type="Texture2D" uid="uid://bjvo547idvjf1" path="res://ui/icons/icy_grasp.svg" id="6_48ki4"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="7_dd375"]
+
+[sub_resource type="Resource" id="Resource_ftaqk"]
+script = ExtResource("1_vdm2a")
+
+[sub_resource type="Resource" id="Resource_sw2md"]
+script = ExtResource("4_x0ve6")
+min_amount = 8
+max_amount = 10
+damage_type = ExtResource("3_0nc70")
+target_filter = 2
+
+[sub_resource type="Resource" id="Resource_aj28g"]
+script = ExtResource("5_kfsyk")
+kind = 4
+distance = 3
+target_filter = 2
+
+[resource]
+script = ExtResource("7_dd375")
+display_name = "Soul Pull"
+icon = ExtResource("6_48ki4")
+ap_cost = 1
+min_range = 2
+max_range = 5
+area = SubResource("Resource_ftaqk")
+effects = Array[ExtResource("2_yiahe")]([SubResource("Resource_sw2md"), SubResource("Resource_aj28g")])

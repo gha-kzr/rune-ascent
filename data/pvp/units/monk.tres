@@ -1,23 +1,22 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bjpw2wkvp3jf7"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_07nns"]
-[ext_resource type="PackedScene" uid="uid://cubjkohqlawfj" path="res://assets/models/monk.tscn" id="2_0m1rj"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_it3dh"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_05w2l"]
-[ext_resource type="Resource" uid="uid://cbmqwvbc2fv2g" path="res://data/pvp/spells/monk_palm.tres" id="5_vxaac"]
-[ext_resource type="Resource" uid="uid://gi8eu2kw217o" path="res://data/pvp/spells/monk_dash.tres" id="6_alf01"]
-[ext_resource type="Resource" uid="uid://do28d2dsyj3di" path="res://data/pvp/spells/monk_staff.tres" id="7_5ipdv"]
-[ext_resource type="Resource" uid="uid://b6itf1cakq50g" path="res://data/pvp/spells/monk_hook.tres" id="8_32pgy"]
-[ext_resource type="Resource" uid="uid://vfucyom24uld" path="res://data/pvp/spells/monk_peace.tres" id="9_ckq5u"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_nq4xn"]
+[ext_resource type="PackedScene" uid="uid://cubjkohqlawfj" path="res://assets/models/monk.tscn" id="2_07nns"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_0m1rj"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_it3dh"]
+[ext_resource type="Resource" uid="uid://cbmqwvbc2fv2g" path="res://data/pvp/spells/monk_palm.tres" id="5_05w2l"]
+[ext_resource type="Resource" uid="uid://do28d2dsyj3di" path="res://data/pvp/spells/monk_staff.tres" id="6_vxaac"]
+[ext_resource type="Resource" uid="uid://gi8eu2kw217o" path="res://data/pvp/spells/monk_dash.tres" id="7_alf01"]
+[ext_resource type="Resource" uid="uid://b6itf1cakq50g" path="res://data/pvp/spells/monk_hook.tres" id="8_5ipdv"]
 
 [resource]
-script = ExtResource("3_it3dh")
+script = ExtResource("3_0m1rj")
 display_name = "Monk"
-max_hp = 140
-ap = 7
+max_hp = 150
+ap = 2
 mp = 6
 initiative = 108
-spells = Array[ExtResource("4_05w2l")]([ExtResource("5_vxaac"), ExtResource("6_alf01"), ExtResource("7_5ipdv"), ExtResource("8_32pgy"), ExtResource("9_ckq5u")])
+spells = Array[ExtResource("4_it3dh")]([ExtResource("5_05w2l"), ExtResource("6_vxaac"), ExtResource("7_alf01"), ExtResource("8_5ipdv")])
 color = Color(0.9, 0.55, 0.2, 1)
-model_scene = ExtResource("2_0m1rj")
+model_scene = ExtResource("2_07nns")
 model_height = 1.5

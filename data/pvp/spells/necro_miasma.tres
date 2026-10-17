@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_ebesk"]
 [ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_glvj5"]
-[ext_resource type="Script" uid="uid://pofmbja20q67" path="res://scripts/data/apply_status_effect.gd" id="3_s02cp"]
-[ext_resource type="Resource" uid="uid://b2jdlqhrigtxv" path="res://data/pvp/statuses/miasma.tres" id="4_887c6"]
+[ext_resource type="Resource" uid="uid://bpx5i7f4hovmg" path="res://data/damage_types/poison.tres" id="3_s02cp"]
+[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_887c6"]
 [ext_resource type="Texture2D" uid="uid://br27kuhpflve5" path="res://ui/icons/miasma.svg" id="5_8jtb5"]
 [ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="6_6etn8"]
 
@@ -13,15 +13,16 @@ kind = 2
 size = 1
 
 [sub_resource type="Resource" id="Resource_tvmkc"]
-script = ExtResource("3_s02cp")
-status = ExtResource("4_887c6")
-target_filter = 2
+script = ExtResource("4_887c6")
+min_amount = 12
+max_amount = 15
+damage_type = ExtResource("3_s02cp")
 
 [resource]
 script = ExtResource("6_6etn8")
 display_name = "Miasma"
 icon = ExtResource("5_8jtb5")
-ap_cost = 4
+ap_cost = 1
 min_range = 3
 max_range = 6
 area = SubResource("Resource_km86e")

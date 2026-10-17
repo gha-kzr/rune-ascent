@@ -1,33 +1,27 @@
 [gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://dpnpchyo07leb"]
 
-[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_fap7i"]
-[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_dy6ds"]
-[ext_resource type="Resource" uid="uid://bpx5i7f4hovmg" path="res://data/damage_types/poison.tres" id="3_lg644"]
-[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_s114o"]
-[ext_resource type="Script" uid="uid://pofmbja20q67" path="res://scripts/data/apply_status_effect.gd" id="5_o0d1i"]
-[ext_resource type="Resource" uid="uid://bsojcp60faa3h" path="res://data/pvp/statuses/plague.tres" id="6_3o4uq"]
-[ext_resource type="Texture2D" uid="uid://dpx3e2kq5442h" path="res://ui/icons/spore_bolt.svg" id="7_w8liq"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="8_02poq"]
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_yw6ae"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_axuiq"]
+[ext_resource type="Resource" uid="uid://bpx5i7f4hovmg" path="res://data/damage_types/poison.tres" id="3_fap7i"]
+[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_dy6ds"]
+[ext_resource type="Texture2D" uid="uid://dpx3e2kq5442h" path="res://ui/icons/spore_bolt.svg" id="5_lg644"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="6_s114o"]
 
-[sub_resource type="Resource" id="Resource_5t47w"]
-script = ExtResource("1_fap7i")
+[sub_resource type="Resource" id="Resource_o0d1i"]
+script = ExtResource("1_yw6ae")
 
-[sub_resource type="Resource" id="Resource_jnaiu"]
-script = ExtResource("4_s114o")
-min_amount = 10
-max_amount = 12
-damage_type = ExtResource("3_lg644")
-
-[sub_resource type="Resource" id="Resource_kc7qx"]
-script = ExtResource("5_o0d1i")
-status = ExtResource("6_3o4uq")
-target_filter = 2
+[sub_resource type="Resource" id="Resource_3o4uq"]
+script = ExtResource("4_dy6ds")
+min_amount = 16
+max_amount = 20
+damage_type = ExtResource("3_fap7i")
 
 [resource]
-script = ExtResource("8_02poq")
+script = ExtResource("6_s114o")
 display_name = "Plague Bolt"
-icon = ExtResource("7_w8liq")
+icon = ExtResource("5_lg644")
+ap_cost = 1
 min_range = 2
 max_range = 5
-area = SubResource("Resource_5t47w")
-effects = Array[ExtResource("2_dy6ds")]([SubResource("Resource_jnaiu"), SubResource("Resource_kc7qx")])
+area = SubResource("Resource_o0d1i")
+effects = Array[ExtResource("2_axuiq")]([SubResource("Resource_3o4uq")])

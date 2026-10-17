@@ -13,7 +13,7 @@ script = ExtResource("1_xbo51")
 
 [sub_resource type="Resource" id="Resource_tb6rt"]
 script = ExtResource("4_3hnwn")
-min_amount = 10
+min_amount = 11
 max_amount = 14
 damage_type = ExtResource("3_nbsw2")
 
@@ -25,6 +25,6 @@ target_filter = 2
 script = ExtResource("7_3m6ht")
 display_name = "Shield Bash"
 icon = ExtResource("6_injo6")
-cooldown = 1
+ap_cost = 1
 area = SubResource("Resource_ka3e1")
 effects = Array[ExtResource("2_in4h0")]([SubResource("Resource_tb6rt"), SubResource("Resource_ctyre")])

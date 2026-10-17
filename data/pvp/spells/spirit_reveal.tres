@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://bugm4mfp4diep"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_5kha6"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_mau84"]
+[ext_resource type="Script" uid="uid://scacoi0pbgna" path="res://scripts/data/reveal_effect.gd" id="3_60bu7"]
+[ext_resource type="Texture2D" uid="uid://dtd01524oha64" path="res://ui/icons/hunters_mark.svg" id="4_dmxb4"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_6fh3m"]
+
+[sub_resource type="Resource" id="Resource_kah50"]
+script = ExtResource("1_5kha6")
+kind = 1
+size = 3
+
+[sub_resource type="Resource" id="Resource_ckrde"]
+script = ExtResource("3_60bu7")
+target_filter = 2
+
+[resource]
+script = ExtResource("5_6fh3m")
+display_name = "Reveal"
+icon = ExtResource("4_dmxb4")
+ap_cost = 1
+min_range = 0
+max_range = 99
+needs_line_of_sight = false
+area = SubResource("Resource_kah50")
+effects = Array[ExtResource("2_mau84")]([SubResource("Resource_ckrde")])

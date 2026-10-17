@@ -55,7 +55,12 @@ func test_pvp_heroes_have_their_full_kit_and_no_level_in_their_name() -> void:
 	for hero in PvpHeroes.hero_count():
 		var built := PvpHeroes.build(hero)
 		var unit := built["unit"] as UnitData
-		assert_eq(unit.spells.size(), HeroRecord.LOADOUT_SLOTS, "%s brings five spells" % unit.display_name)
+		assert_eq(unit.spells.size(), 4, "%s brings four spells" % unit.display_name)
+		assert_eq(unit.ap, 2, "two spells a turn")
+		for spell in unit.spells:
+			assert_eq(spell.ap_cost, 1, "%s: every spell costs one action" % spell.display_name)
+			assert_true(spell.cooldown <= 2, "%s: a cooldown of 2 turns at most" % spell.display_name)
+		assert_true(unit.innate_modifiers.is_empty(), "%s: no resistances in multiplayer" % unit.display_name)
 		assert_false(unit.display_name.contains("Lv"), "no level in the name")
 	assert_eq((PvpHeroes.build(0)["modifiers"] as Array).size(), 0, "no levels, no runes")
 
@@ -133,7 +138,7 @@ func test_the_pvp_roster_is_valid_and_varied() -> void:
 	var women := roster.heroes.filter(func(hero: PvpHero) -> bool: return hero.gender == PvpHero.Gender.FEMALE)
 	assert_true(women.size() >= 2, "at least two female classes")
 	for hero in roster.heroes:
-		assert_eq(hero.unit.spells.size(), 5, hero.display_name())
+		assert_eq(hero.unit.spells.size(), 4, hero.display_name())
 		for modifier in hero.unit.innate_modifiers:
 			assert_ne(modifier.stat, StatModifier.Stat.POWER)
 

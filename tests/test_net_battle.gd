@@ -13,7 +13,7 @@ func _frames(count := 3) -> void:
 func _controller(rig: NetRig, seat: int) -> NetBattleController:
 	var controller := SCENE.instantiate() as NetBattleController
 	controller.setup_net(rig.sessions[seat])
-	controller.play_speed = Settings.BattleSpeed.INSTANT
+	controller.settings.net_battle_speed = Settings.BattleSpeed.INSTANT
 	(Engine.get_main_loop() as SceneTree).root.add_child(controller)
 	return controller
 
@@ -117,6 +117,36 @@ func test_my_turn_ends_through_the_host_and_everyone_sees_the_next_turn() -> voi
 	guest.free()
 
 
+func test_my_turn_is_announced_to_me_once_and_the_others_see_whose_it_is() -> void:
+	var rig := _fight()
+	var host := _controller(rig, 1)
+	var guest := _controller(rig, 2)
+	var sounds: Dictionary[int, Array] = {1: [], 2: []}
+	host.sound.connect(func(event: StringName) -> void: sounds[1].append(event))
+	guest.sound.connect(func(event: StringName) -> void: sounds[2].append(event))
+	await _frames()
+	await _both_ready(rig, host, guest)
+	var mine := host if host.battle.state.current_unit().id == 0 else guest
+	var seat := 1 if mine == host else 2
+	assert_eq(sounds[seat].count(&"your_turn"), 1, "my turn's sound")
+	assert_eq(sounds[3 - seat].count(&"your_turn"), 0, "not theirs")
+	assert_eq(mine._turn_banner_text(mine.battle.state.current_unit()), tr("Your turn!"))
+	var other := host if mine == guest else guest
+	assert_true(other._turn_banner_text(other.battle.state.current_unit()).ends_with("'s turn"), "the others read whose turn it is")
+	mine._begin_next()  # As after an action: the turn goes on.
+	assert_eq(sounds[seat].count(&"your_turn"), 1, "once per turn")
+	rig.run(float(rig.sessions[1].state.settings["turn"]) - NetBattleController.TURN_WARNING_SECONDS - 0.5)
+	await _frames()
+	assert_eq(sounds[seat].count(&"turn_warning"), 1, "the last seconds start ticking")
+	await _frames()
+	assert_eq(sounds[seat].count(&"turn_warning"), 1, "once for that second")
+	rig.run(1.0)
+	await _frames()
+	assert_eq(sounds[seat].count(&"turn_warning"), 2, "and again the next second")
+	host.free()
+	guest.free()
+
+
 func test_a_view_opened_late_replays_the_log_and_shows_where_things_stand() -> void:
 	var rig := _fight()
 	for id in rig.sessions:
@@ -187,19 +217,23 @@ func test_the_spell_bar_always_shows_my_own_hero_not_the_one_whose_turn_it_is() 
 	guest.free()
 
 
-func test_everyone_plays_at_normal_speed_and_the_settings_speed_is_left_alone() -> void:
+func test_the_fight_plays_at_the_players_multiplayer_speed_and_leaves_the_solo_one_alone() -> void:
 	var rig := _fight()
 	var controller := SCENE.instantiate() as NetBattleController
 	controller.setup_net(rig.sessions[1])
 	controller.settings.battle_speed = Settings.BattleSpeed.INSTANT  # This player's solo setting.
 	(Engine.get_main_loop() as SceneTree).root.add_child(controller)
 	await _frames()
-	assert_false(controller.event_player.instant, "the multiplayer fight does not skip animations whatever the setting says")
-	assert_eq(controller.settings.battle_speed, Settings.BattleSpeed.INSTANT, "and the setting is as the player left it")
-	assert_false((controller.hud.get_node("%SpeedButton") as Control).visible, "no speed button")
+	assert_eq(controller.settings.net_battle_speed, Settings.BattleSpeed.FAST, "x2 by default")
+	assert_false(controller.event_player.instant, "not the solo setting")
+	assert_eq(Engine.time_scale, BattleController.FAST_TIME_SCALE)
+	assert_true((controller.hud.get_node("%SpeedButton") as Control).visible, "a speed button")
 	controller.cycle_battle_speed()
-	assert_eq(controller.settings.battle_speed, Settings.BattleSpeed.INSTANT, "nothing cycles it")
+	assert_eq(controller.settings.net_battle_speed, Settings.BattleSpeed.INSTANT)
+	assert_true(controller.event_player.instant)
+	assert_eq(controller.settings.battle_speed, Settings.BattleSpeed.INSTANT, "the solo setting is as the player left it")
 	controller.free()
+	assert_eq(Engine.time_scale, 1.0, "time given back")
 
 
 func test_a_quick_message_is_a_comic_bubble_with_a_tail() -> void:
@@ -388,3 +422,138 @@ func test_a_player_who_comes_back_to_the_ai_played_hero_can_act_on_their_turn() 
 	assert_true(acted, "my turn came back")
 	host.free()
 	back.free()
+
+
+func test_a_mark_is_shown_to_the_marking_players_team_only_and_replaces_their_last_one() -> void:
+	var rig := _fight(3, 2)  # Seats 1 and 2 on side A, seat 3 on side B.
+	var host := _controller(rig, 1)
+	var mate := _controller(rig, 2)
+	var foe := _controller(rig, 3)
+	await _frames()
+	rig.sessions[2].send_mark(Vector2i(1, 1))
+	rig.net.flush()
+	await _frames()
+	var marks := host.find_children("*", "BoardMark", false, false)
+	assert_eq(marks.size(), 1, "my teammate's mark is on my board")
+	assert_eq((marks[0] as BoardMark).text(), host.tr("%s: Here!") % rig.sessions[1].state.seats[2].name)
+	assert_eq(mate.find_children("*", "BoardMark", false, false).size(), 1, "and on theirs")
+	assert_eq(foe.find_children("*", "BoardMark", false, false).size(), 0, "never on the other team's")
+	assert_eq(host.feed_texts()[-1], (marks[0] as BoardMark).text(), "and in the feed")
+	assert_true(foe.feed_texts().is_empty())
+	rig.run(MatchSession.MARK_COOLDOWN + 0.1)
+	rig.sessions[2].send_mark(Vector2i(2, 1))
+	rig.net.flush()
+	await _frames()
+	var left := host.find_children("*", "BoardMark", false, false).filter(func(m: Node) -> bool: return not m.is_queued_for_deletion())
+	assert_eq(left.size(), 1, "a new mark replaces the player's last one")
+	for mark in host.find_children("*", "BoardMark", false, false):
+		mark.free()  # Faded out on its own.
+	rig.run(MatchSession.MARK_COOLDOWN + 0.1)
+	rig.sessions[2].send_mark(Vector2i(3, 1))
+	rig.net.flush()
+	await _frames()
+	assert_eq(host.find_children("*", "BoardMark", false, false).size(), 1, "the next mark shows after the last one faded out")
+	host.free()
+	mate.free()
+	foe.free()
+
+
+## Real input, as a player does it: the mouse over a cell, then the Point out key.
+func _press_mark_key(controller: NetBattleController, cell: Vector2i) -> void:
+	var at := controller.camera_rig.camera.unproject_position(controller.board_view.cell_to_world(cell))
+	var motion := InputEventMouseMotion.new()
+	motion.position = at
+	motion.global_position = at
+	controller.get_viewport().push_input(motion)
+	controller.get_viewport().warp_mouse(at)
+	for pressed in [true, false]:
+		var key := InputEventKey.new()
+		key.physical_keycode = KEY_G
+		key.keycode = KEY_G
+		key.pressed = pressed
+		controller.get_viewport().push_input(key)
+		await _frames(1)
+
+
+func test_the_point_out_key_marks_the_cell_under_the_mouse_at_once_and_again() -> void:
+	var rig := _fight(3, 2)
+	var host := _controller(rig, 1)
+	await _frames()
+	var foe := host.battle.state.units[rig.sessions[1].unit_of(3)]
+	var sent: Array = []
+	rig.sessions[1].mark_received.connect(func(seat: int, cell: Vector2i) -> void: sent.append([seat, cell]))
+	await _press_mark_key(host, foe.cell)
+	rig.net.flush()
+	assert_eq(sent, [[1, foe.cell]], "no menu: the mark goes where the mouse is")
+	rig.run(MatchSession.MARK_COOLDOWN + 0.1)
+	await _press_mark_key(host, foe.cell)
+	rig.net.flush()
+	assert_eq(sent.size(), 2, "and again")
+	host.free()
+
+
+func test_the_point_out_button_makes_the_next_click_a_mark() -> void:
+	var rig := _fight(3, 2)
+	var host := _controller(rig, 1)
+	await _frames()
+	var foe := host.battle.state.units[rig.sessions[1].unit_of(3)]
+	var point := host.find_child("PointButton", true, false) as Button
+	var say := host.find_child("SayButton", true, false) as Button
+	assert_eq(point.get_index() + 1, say.get_index(), "a button of its own, above Say something")
+	assert_true(point.text.contains(SettingsApplier.key_text(&"mark")), "it shows the key too")
+	point.button_pressed = true
+	assert_true(host._prompt_text().contains("point it out"))
+	host.cancel()
+	assert_false(host._marking or point.button_pressed, "Esc lets go")
+	point.button_pressed = true
+	host.click_cell(foe.cell)
+	rig.net.flush()
+	assert_eq(host.find_children("*", "BoardMark", false, false).size(), 1, "the click marked the cell")
+	assert_false(host._marking, "one click only")
+	assert_false(point.button_pressed, "the button lets go")
+	host.free()
+
+
+func test_while_someone_else_plays_the_prompt_says_how_to_point_things_out() -> void:
+	var rig := _fight()
+	var host := _controller(rig, 1)
+	var guest := _controller(rig, 2)
+	await _frames()
+	await _both_ready(rig, host, guest)
+	var waiting := guest if host.battle.state.current_unit().id == 0 else host
+	assert_eq(waiting.input_state, BattleController.State.ENEMY_TURN)
+	assert_true(waiting._prompt_text().contains(SettingsApplier.key_text(&"mark")), waiting._prompt_text())
+	host.free()
+	guest.free()
+
+
+func test_a_fallen_players_quick_message_goes_in_the_feed() -> void:
+	var rig := _fight()
+	var host := _controller(rig, 1)
+	await _frames()
+	var bob_unit := rig.sessions[1].unit_of(2)
+	host.battle.state.units[bob_unit].hp = 0  # Bob's hero has fallen (on this screen).
+	rig.sessions[2].send_emote(7)
+	rig.net.flush()
+	assert_eq(host.units_view.find_view(bob_unit).speech_text(), "", "no bubble over a fallen hero")
+	assert_true(host.feed_texts()[-1].ends_with(Emotes.text(7)), "the feed says it")
+	host.free()
+
+
+func test_a_spirits_turn_and_action_are_told_to_everyone() -> void:
+	var rig := _fight()
+	var host := _controller(rig, 1)
+	var guest := _controller(rig, 2)
+	await _frames()
+	var mine := host.battle.state.units[host._my_unit()]
+	var theirs := host.battle.state.units[guest._my_unit()]
+	assert_true(rig.sessions[1].state.settings["spirits"], "the lobby rule is on by default")
+	assert_false(host.battle.state.spirit_kit.is_empty(), "and the battle has the spirits' spells")
+	mine.spirit = true
+	assert_eq(host._turn_banner_text(mine), host.tr("Your spirit's turn!"))
+	assert_eq(guest._turn_banner_text(guest.battle.state.units[mine.id]), "Host's turn", "not a spirit on the other screen yet")
+	var curse := PvpHeroes.spirit_kit()[0]
+	host._event_seen(BattleEvents.SpellCast.new(mine.id, curse, theirs.cell, [theirs.cell] as Array[Vector2i], 1))
+	assert_eq(host.feed_texts()[-1], host.tr("%s's spirit: %s on %s") % [mine.label, host.tr(curse.display_name), theirs.label])
+	host.free()
+	guest.free()

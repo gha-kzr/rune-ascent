@@ -15,6 +15,9 @@ extends VBoxContainer
 signal spell_pressed(index: int)
 ## Card combat: the player threw the card at this position away (its ✕, or a right click on it).
 signal discard_pressed(index: int)
+## The spell under the mouse changed (null: none). `on_bar`: one of the bar's own slots or cards, not a row of
+## another list (set_extra_targets).
+signal spell_hovered(spell: SpellData, on_bar: bool)
 
 ## Spell slot i is pressed by the InputMap action "spell_<i+1>" (rebindable in the settings).
 const MAX_KEYED_SLOTS := 9
@@ -25,6 +28,9 @@ const HEAL_TINT := Color(0.55, 1.0, 0.6)
 var _spells: Array[SpellData] = []
 var _spell_costs: Array[int] = []
 var _hovered: SpellData
+## What spell_hovered last reported.
+var _reported: SpellData
+var _reported_on_bar := false
 ## Card combat: the slots are the cards of a hand (see CardRules).
 var _card_mode := false
 var _deck_total := 0
@@ -71,14 +77,23 @@ func hover_at(point: Vector2) -> void:
 	var target := _target_at(point)
 	if target.is_empty():
 		_hovered = null
+		_report_hover(null, false)
 		if _details.visible:
 			hide_details()
 		return
 	var spell := target[1] as SpellData
+	_report_hover(spell, slot_at(point) >= 0)
 	if spell != _hovered or not _details.visible:
 		_hovered = spell
 		show_details(spell)
 	_place_details(target[0] as Control)
+
+
+func _report_hover(spell: SpellData, on_bar: bool) -> void:
+	if spell != _reported or on_bar != _reported_on_bar:
+		_reported = spell
+		_reported_on_bar = on_bar
+		spell_hovered.emit(spell, on_bar)
 
 
 ## The slot under `point` (global coordinates), -1 for none.
@@ -199,7 +214,7 @@ func show_details(spell: SpellData) -> void:
 	if _card_mode:
 		_details_cost.text = tr("1 play")
 		lines = lines.filter(func(line: String) -> bool: return not (line == tr("Once per turn") or line.begins_with(tr("Every %d turns").split("%")[0])))
-		lines.append(tr("%s card: %d of %d in the deck") % [CardRules.rarity_name(spell), CardRules.copies(spell), _deck_total])
+		lines.append(tr("%d of the %d cards in the deck") % [CardRules.copies(spell), _deck_total])
 	else:
 		_details_cost.text = tr("%d AP") % spell.ap_cost
 	_details_body.text = "\n".join(lines)
@@ -314,7 +329,7 @@ func _make_slot(spell: SpellData, index: int) -> Button:
 	return button
 
 
-## A card's name, its rarity stripe and the ✕ that throws it away (a right click does too).
+## A card's name and the ✕ that throws it away (a right click does too).
 func _add_card_face(button: Button, spell: SpellData, index: int) -> void:
 	var title := Label.new()
 	title.name = "CardName"
@@ -328,14 +343,6 @@ func _add_card_face(button: Button, spell: SpellData, index: int) -> void:
 	title.offset_bottom = -12.0
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(title)
-	var stripe := ColorRect.new()
-	stripe.name = "Rarity"
-	stripe.color = CardRules.rarity_color(spell)
-	stripe.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE, Control.PRESET_MODE_MINSIZE, 8)
-	stripe.offset_top = -10.0
-	stripe.offset_bottom = -6.0
-	stripe.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(stripe)
 	var discard := Button.new()
 	discard.name = "Discard"
 	discard.text = "X"

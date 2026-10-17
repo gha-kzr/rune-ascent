@@ -5,10 +5,19 @@ extends EffectData
 ## statuses are "the same" when they are the same StatusData resource.
 
 @export var status: StatusData
+## Can't be aimed at a unit that already carries the status (a spirit's curse: one at a time on a target).
+@export var exclusive := false
 
 
 func is_harmful() -> bool:
 	return status != null and not status.is_positive
+
+
+func allows_target(state: BattleState, _caster_id: int, cell: Vector2i) -> bool:
+	if not exclusive:
+		return true
+	var unit := state.unit_at(cell)
+	return unit == null or unit.find_status(status) == null
 
 
 func apply(state: BattleState, caster_id: int, target_id: int) -> Array[BattleEvents.Event]:

@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://dbnjjf4n0v8rl"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_2nq7m"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_s1qk3"]
+[ext_resource type="Resource" uid="uid://b4jrpxctg8xvs" path="res://data/damage_types/holy.tres" id="3_ikrnw"]
+[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_nkovs"]
+[ext_resource type="Texture2D" uid="uid://bpcr7aej2yhyp" path="res://ui/icons/repulse.svg" id="5_3f01m"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="6_cgjjq"]
+
+[sub_resource type="Resource" id="Resource_j047y"]
+script = ExtResource("1_2nq7m")
+kind = 2
+size = 1
+
+[sub_resource type="Resource" id="Resource_qh331"]
+script = ExtResource("4_nkovs")
+min_amount = 11
+max_amount = 14
+damage_type = ExtResource("3_ikrnw")
+target_filter = 2
+
+[resource]
+script = ExtResource("6_cgjjq")
+display_name = "Radiance"
+icon = ExtResource("5_3f01m")
+ap_cost = 1
+min_range = 0
+max_range = 0
+needs_line_of_sight = false
+area = SubResource("Resource_j047y")
+effects = Array[ExtResource("2_s1qk3")]([SubResource("Resource_qh331")])

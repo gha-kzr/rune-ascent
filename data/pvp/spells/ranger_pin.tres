@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://bdrr6ge5g7xv6" path="res://data/damage_types/physical.tres" id="3_cde0f"]
 [ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_hrpex"]
 [ext_resource type="Script" uid="uid://pofmbja20q67" path="res://scripts/data/apply_status_effect.gd" id="5_k7pb2"]
-[ext_resource type="Resource" uid="uid://b0g2531mgq62q" path="res://data/pvp/statuses/slowed.tres" id="6_ym8lh"]
+[ext_resource type="Resource" uid="uid://yg8chhyftw31" path="res://data/pvp/statuses/rooted.tres" id="6_ym8lh"]
 [ext_resource type="Texture2D" uid="uid://blo52dox01h4s" path="res://ui/icons/pinning_shot.svg" id="7_an5p8"]
 [ext_resource type="PackedScene" uid="uid://bhakvvqjmigx6" path="res://scenes/fx/projectile_arrow.tscn" id="8_b5fuy"]
 [ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="9_ygdvu"]
@@ -31,7 +31,8 @@ icon = ExtResource("7_an5p8")
 cast_animation = &"Shoot"
 projectile = ExtResource("8_b5fuy")
 projectile_speed = 20.0
-cooldown = 1
+ap_cost = 1
+cooldown = 2
 min_range = 2
 max_range = 6
 area = SubResource("Resource_3h258")

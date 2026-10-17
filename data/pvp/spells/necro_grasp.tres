@@ -1,26 +1,35 @@
 [gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://hq27aggphst2"]
 
-[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_ia4sc"]
-[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_80rx7"]
-[ext_resource type="Script" uid="uid://pofmbja20q67" path="res://scripts/data/apply_status_effect.gd" id="3_si454"]
-[ext_resource type="Resource" uid="uid://yg8chhyftw31" path="res://data/pvp/statuses/rooted.tres" id="4_1kps6"]
-[ext_resource type="Texture2D" uid="uid://depqno5d0k8pe" path="res://ui/icons/chill_touch.svg" id="5_1reas"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="6_hqjx1"]
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_si454"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_1kps6"]
+[ext_resource type="Resource" uid="uid://bpx5i7f4hovmg" path="res://data/damage_types/poison.tres" id="3_1reas"]
+[ext_resource type="Script" uid="uid://diubgsgeigrq0" path="res://scripts/data/damage_effect.gd" id="4_hqjx1"]
+[ext_resource type="Script" uid="uid://pofmbja20q67" path="res://scripts/data/apply_status_effect.gd" id="5_3y2ny"]
+[ext_resource type="Resource" uid="uid://yg8chhyftw31" path="res://data/pvp/statuses/rooted.tres" id="6_06jra"]
+[ext_resource type="Texture2D" uid="uid://depqno5d0k8pe" path="res://ui/icons/chill_touch.svg" id="7_juhht"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="8_ixeaj"]
 
-[sub_resource type="Resource" id="Resource_3y2ny"]
-script = ExtResource("1_ia4sc")
+[sub_resource type="Resource" id="Resource_booln"]
+script = ExtResource("1_si454")
 
-[sub_resource type="Resource" id="Resource_06jra"]
-script = ExtResource("3_si454")
-status = ExtResource("4_1kps6")
+[sub_resource type="Resource" id="Resource_8k4a3"]
+script = ExtResource("4_hqjx1")
+min_amount = 8
+max_amount = 10
+damage_type = ExtResource("3_1reas")
+
+[sub_resource type="Resource" id="Resource_5o3c3"]
+script = ExtResource("5_3y2ny")
+status = ExtResource("6_06jra")
 target_filter = 2
 
 [resource]
-script = ExtResource("6_hqjx1")
+script = ExtResource("8_ixeaj")
 display_name = "Grasping Dead"
-icon = ExtResource("5_1reas")
-cooldown = 3
+icon = ExtResource("7_juhht")
+ap_cost = 1
+cooldown = 2
 min_range = 2
 max_range = 5
-area = SubResource("Resource_3y2ny")
-effects = Array[ExtResource("2_80rx7")]([SubResource("Resource_06jra")])
+area = SubResource("Resource_booln")
+effects = Array[ExtResource("2_1kps6")]([SubResource("Resource_8k4a3"), SubResource("Resource_5o3c3")])

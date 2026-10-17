@@ -12,14 +12,15 @@ script = ExtResource("1_thpqv")
 
 [sub_resource type="Resource" id="Resource_tmaxk"]
 script = ExtResource("4_q1bd5")
-min_amount = 14
-max_amount = 18
+min_amount = 17
+max_amount = 21
 damage_type = ExtResource("3_gdrmb")
 
 [resource]
 script = ExtResource("6_jo1x4")
 display_name = "Spectral Touch"
 icon = ExtResource("5_r1ef2")
+ap_cost = 1
 max_range = 3
 area = SubResource("Resource_hax4s")
 effects = Array[ExtResource("2_ah1gu")]([SubResource("Resource_tmaxk")])

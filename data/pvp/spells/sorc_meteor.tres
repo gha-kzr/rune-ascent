@@ -17,10 +17,9 @@ size = 2
 
 [sub_resource type="Resource" id="Resource_l5t3p"]
 script = ExtResource("5_0cdcc")
-min_amount = 36
-max_amount = 44
+min_amount = 28
+max_amount = 34
 damage_type = ExtResource("4_a6lki")
-target_filter = 2
 
 [resource]
 script = ExtResource("9_n5td8")
@@ -34,8 +33,8 @@ projectile = ExtResource("8_hiu02")
 projectile_speed = 9.0
 projectile_falls = true
 impact_shake = 0.14
-ap_cost = 6
-cooldown = 4
+ap_cost = 1
+cooldown = 2
 min_range = 4
 max_range = 7
 area = SubResource("Resource_xq5fe")

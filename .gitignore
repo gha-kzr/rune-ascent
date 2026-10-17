@@ -18,3 +18,6 @@ mono_crash.*.json
 
 # Exports
 build/
+
+# Balance runs (tools/pvp_balance.gd out=balance/...)
+balance/

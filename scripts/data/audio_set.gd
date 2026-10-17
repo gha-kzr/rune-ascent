@@ -6,7 +6,7 @@ extends Resource
 
 ## What the game asks to hear (events of the battle, the screens and the result).
 const SFX_EVENTS: Array[StringName] = [&"ui_click", &"cast", &"cast_fire", &"cast_fireball", &"cast_physical", &"cast_poison", &"hit",
-		&"heal", &"step", &"death", &"turn_start", &"victory", &"defeat"]
+		&"heal", &"step", &"death", &"turn_start", &"your_turn", &"turn_warning", &"victory", &"defeat"]
 ## Looping tracks, by the screens that play them.
 const MUSIC_TRACKS: Array[StringName] = [&"hub", &"battle", &"boss"]
 

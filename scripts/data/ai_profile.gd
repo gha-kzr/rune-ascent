@@ -24,12 +24,21 @@ extends Resource
 ## Worth of staying hidden (stealth), in HP.
 @export_range(0.0, 100.0) var stealth_value := 25.0
 
+@export_group("Movement")
+## A cast that moves someone (a teleport, a jump, a pull) is worth this share of the better hit it opens for the
+## action points left: the hit itself comes next, at full value.
+@export_range(0.0, 1.0) var follow_up_share := 0.6
+## Worth of each step closer to the opponents a move spell gets than walking could (units without a Positioning).
+@export_range(0.0, 20.0) var approach_value := 2.0
+## Worth of each step a cast puts between a hurt ally and the opponents, times the share of HP it is missing.
+@export_range(0.0, 20.0) var rescue_value := 3.0
+
 
 func get_validation_errors() -> PackedStringArray:
 	var errors := PackedStringArray()
 	# Export ranges only constrain the Inspector; hand-edited .tres files can go past them.
 	for weight in ["kill_bonus", "heal_weight", "friendly_fire_weight", "status_weight", "ap_value",
-			"mp_value", "incoming_damage_per_turn", "stealth_value"]:
+			"mp_value", "incoming_damage_per_turn", "stealth_value", "follow_up_share", "approach_value", "rescue_value"]:
 		if get(weight) < 0.0:
 			errors.append("AI profile: %s must be >= 0" % weight)
 	return errors

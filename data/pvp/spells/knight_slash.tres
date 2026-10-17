@@ -12,8 +12,8 @@ script = ExtResource("1_ykaa1")
 
 [sub_resource type="Resource" id="Resource_vnt8a"]
 script = ExtResource("4_jypt5")
-min_amount = 16
-max_amount = 20
+min_amount = 17
+max_amount = 21
 damage_type = ExtResource("3_0515b")
 
 [resource]
@@ -21,5 +21,6 @@ script = ExtResource("6_spsh0")
 display_name = "Slash"
 icon = ExtResource("5_jt467")
 impact_delay = 0.3
+ap_cost = 1
 area = SubResource("Resource_8aqjl")
 effects = Array[ExtResource("2_85i1q")]([SubResource("Resource_vnt8a")])

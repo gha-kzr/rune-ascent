@@ -76,5 +76,25 @@ static func keep_running_when_hidden() -> void:
 	""", true)
 
 
+## Whether the browser runs on a Mac (its Alt key is called Option). False outside a browser.
+static func is_mac() -> bool:
+	if not is_web():
+		return false
+	return JavaScriptBridge.eval("/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)", true) == true
+
+
+## Marks the browser tab's title (`text` before the page's own title), so a player in another tab sees their turn has
+## come; "" puts the title back. Does nothing outside a browser.
+static func set_title_alert(text: String) -> void:
+	if not is_web():
+		return
+	JavaScriptBridge.eval("""
+		(function (text) {
+			if (window.runeAscentTitle === undefined) { window.runeAscentTitle = document.title; }
+			document.title = text ? text + ' · ' + window.runeAscentTitle : window.runeAscentTitle;
+		})(%s)
+	""" % JSON.stringify(text), true)
+
+
 static func copy(text: String) -> void:
 	DisplayServer.clipboard_set(text)

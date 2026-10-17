@@ -335,7 +335,42 @@ func test_aiming_shows_cells_hidden_from_sight_faded() -> void:
 	assert_eq(controller.board_view.highlighted_count(BoardView.Highlight.RANGE), 1)
 	assert_eq(controller.board_view.highlighted_count(BoardView.Highlight.RANGE_BLOCKED), 2)
 	controller.click_cell(Vector2i(4, 0))
-	assert_eq(controller.input_state, BattleController.State.TARGETING, "a blocked cell can't be aimed at")
+	assert_eq(controller.input_state, BattleController.State.TARGETING, "a blocked cell can't be aimed at, and keeps the aim")
+
+
+func test_a_click_out_of_the_aimed_spells_range_stops_aiming() -> void:
+	var controller := _controller("0p 0 0 0 0e", [_fighter("P0", 200)], [_fighter("E0", 100)])
+	assert_true(await _wait_for(controller, [BattleController.State.IDLE]))
+	controller.select_spell(0)
+	assert_eq(controller.input_state, BattleController.State.TARGETING)
+	controller.click_cell(Vector2i(3, 0))
+	assert_eq(controller.input_state, BattleController.State.IDLE, "out of range: like Esc")
+	assert_eq(controller.selected_spell, -1)
+
+
+func test_hovering_a_spell_shows_its_range_from_its_caster() -> void:
+	var bolt := BattleFixtures.damage_spell(3, 1, 4, 5, AreaShape.Kind.SINGLE, 0, true)
+	var caster := BattleFixtures.unit("P0", 200)
+	caster.spells = [bolt] as Array[SpellData]
+	var enemy := _fighter("E0", 100)
+	var controller := _controller("0p 0 # 0 0e", [caster], [enemy])
+	assert_true(await _wait_for(controller, [BattleController.State.IDLE]))
+	var board := controller.board_view
+	var reach := board.highlighted_count(BoardView.Highlight.REACH)
+	assert_true(reach > 0, "the move zone is up")
+	controller.hud.spell_hovered.emit(bolt, true)
+	assert_eq(board.highlighted_count(BoardView.Highlight.RANGE), 1, "in sight")
+	assert_eq(board.highlighted_count(BoardView.Highlight.RANGE_BLOCKED), 2, "behind the rock")
+	assert_eq(board.highlighted_count(BoardView.Highlight.REACH), 0, "the move zone steps aside")
+	controller.hud.spell_hovered.emit(null, false)
+	assert_eq(board.highlighted_count(BoardView.Highlight.RANGE), 0)
+	assert_eq(board.highlighted_count(BoardView.Highlight.RANGE_BLOCKED), 0)
+	assert_eq(board.highlighted_count(BoardView.Highlight.REACH), reach, "and comes back")
+	# A spell on the inspected enemy's card: its range, from the enemy.
+	controller._hovered_cell = Vector2i(4, 0)
+	controller._update_hover()
+	controller.hud.spell_hovered.emit(enemy.spells[0], false)
+	assert_eq(board.highlighted_count(BoardView.Highlight.RANGE), 1, "the cell next to the enemy")
 
 
 func test_hovering_another_unit_inspects_it() -> void:
@@ -617,10 +652,10 @@ func test_right_click_over_the_hud_stops_aiming() -> void:
 
 func test_prompts_show_the_keys_the_player_bound() -> void:
 	var settings := Settings.new()
-	SettingsApplier.set_binding(settings, &"end_turn", KEY_G)
+	SettingsApplier.set_binding(settings, &"end_turn", KEY_J)
 	SettingsApplier.set_binding(settings, &"spell_1", KEY_Z)
 	var controller := _controller("0p 0 0 0e", [_fighter("P0", 200)], [_fighter("E0", 100)], false)
-	assert_true(controller._prompt_text().contains("Ready (G)"), controller._prompt_text())
+	assert_true(controller._prompt_text().contains("Ready (J)"), controller._prompt_text())
 	controller.end_turn()
 	assert_true(await _wait_for(controller, [BattleController.State.IDLE]))
 	assert_true(controller._prompt_text().ends_with("(Z)"), "one spell: its key only: %s" % controller._prompt_text())

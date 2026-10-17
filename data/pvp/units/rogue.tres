@@ -1,23 +1,22 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://dsubydketjm6i"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_pmp4c"]
-[ext_resource type="PackedScene" uid="uid://cnihshawgcb16" path="res://assets/models/rogue.tscn" id="2_rdu3q"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_luw4u"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_6rfyy"]
-[ext_resource type="Resource" uid="uid://dce5la10xom5d" path="res://data/pvp/spells/rogue_dagger.tres" id="5_s1jul"]
-[ext_resource type="Resource" uid="uid://qd0kchgqrf0e" path="res://data/pvp/spells/rogue_ambush.tres" id="6_0idxl"]
-[ext_resource type="Resource" uid="uid://idcamdnudqdx" path="res://data/pvp/spells/rogue_vanish.tres" id="7_2wivs"]
-[ext_resource type="Resource" uid="uid://72rla1awckuf" path="res://data/pvp/spells/rogue_shadow_step.tres" id="8_mqkg3"]
-[ext_resource type="Resource" uid="uid://od27fgjuqglf" path="res://data/pvp/spells/rogue_hamstring.tres" id="9_c2s2b"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_fe1bj"]
+[ext_resource type="PackedScene" uid="uid://cnihshawgcb16" path="res://assets/models/rogue.tscn" id="2_pmp4c"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_rdu3q"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_luw4u"]
+[ext_resource type="Resource" uid="uid://dce5la10xom5d" path="res://data/pvp/spells/rogue_dagger.tres" id="5_6rfyy"]
+[ext_resource type="Resource" uid="uid://qd0kchgqrf0e" path="res://data/pvp/spells/rogue_ambush.tres" id="6_s1jul"]
+[ext_resource type="Resource" uid="uid://72rla1awckuf" path="res://data/pvp/spells/rogue_shadow_step.tres" id="7_0idxl"]
+[ext_resource type="Resource" uid="uid://idcamdnudqdx" path="res://data/pvp/spells/rogue_vanish.tres" id="8_2wivs"]
 
 [resource]
-script = ExtResource("3_luw4u")
+script = ExtResource("3_rdu3q")
 display_name = "Rogue"
 max_hp = 110
-ap = 7
+ap = 2
 mp = 6
 initiative = 115
-spells = Array[ExtResource("4_6rfyy")]([ExtResource("5_s1jul"), ExtResource("6_0idxl"), ExtResource("7_2wivs"), ExtResource("8_mqkg3"), ExtResource("9_c2s2b")])
+spells = Array[ExtResource("4_luw4u")]([ExtResource("5_6rfyy"), ExtResource("6_s1jul"), ExtResource("7_0idxl"), ExtResource("8_2wivs")])
 color = Color(0.25, 0.3, 0.35, 1)
-model_scene = ExtResource("2_rdu3q")
+model_scene = ExtResource("2_pmp4c")
 model_height = 1.5

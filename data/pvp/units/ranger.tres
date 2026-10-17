@@ -1,26 +1,25 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://w3y6fh12mfmv"]
 
-[ext_resource type="PackedScene" uid="uid://cbvr5kv6juado" path="res://assets/models/bow.tscn" id="1_321t1"]
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="2_d1hwf"]
-[ext_resource type="PackedScene" uid="uid://dvgqfv0wfmn3y" path="res://assets/models/ranger.tscn" id="3_pm6qe"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="4_2qmib"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_vypwv"]
-[ext_resource type="Resource" uid="uid://cgswigpfp4268" path="res://data/pvp/spells/ranger_arrow.tres" id="6_sgm01"]
-[ext_resource type="Resource" uid="uid://1ehonfiq4p3r" path="res://data/pvp/spells/ranger_volley.tres" id="7_hckvv"]
-[ext_resource type="Resource" uid="uid://c3wd0hkqqs583" path="res://data/pvp/spells/ranger_mark.tres" id="8_1vopd"]
-[ext_resource type="Resource" uid="uid://bv3uwmq4i3k7q" path="res://data/pvp/spells/ranger_pin.tres" id="9_orsjy"]
-[ext_resource type="Resource" uid="uid://ccbqd07flp7ck" path="res://data/pvp/spells/ranger_backslash.tres" id="10_ditxn"]
+[ext_resource type="PackedScene" uid="uid://cbvr5kv6juado" path="res://assets/models/bow.tscn" id="1_s1850"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="2_321t1"]
+[ext_resource type="PackedScene" uid="uid://dvgqfv0wfmn3y" path="res://assets/models/ranger.tscn" id="3_d1hwf"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="4_pm6qe"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_2qmib"]
+[ext_resource type="Resource" uid="uid://cgswigpfp4268" path="res://data/pvp/spells/ranger_arrow.tres" id="6_vypwv"]
+[ext_resource type="Resource" uid="uid://1ehonfiq4p3r" path="res://data/pvp/spells/ranger_volley.tres" id="7_sgm01"]
+[ext_resource type="Resource" uid="uid://ccbqd07flp7ck" path="res://data/pvp/spells/ranger_backslash.tres" id="8_hckvv"]
+[ext_resource type="Resource" uid="uid://bv3uwmq4i3k7q" path="res://data/pvp/spells/ranger_pin.tres" id="9_1vopd"]
 
 [resource]
-script = ExtResource("4_2qmib")
+script = ExtResource("4_pm6qe")
 display_name = "Ranger"
 max_hp = 130
-ap = 7
+ap = 2
 mp = 5
 initiative = 108
-spells = Array[ExtResource("5_vypwv")]([ExtResource("6_sgm01"), ExtResource("7_hckvv"), ExtResource("8_1vopd"), ExtResource("9_orsjy"), ExtResource("10_ditxn")])
+spells = Array[ExtResource("5_2qmib")]([ExtResource("6_vypwv"), ExtResource("7_sgm01"), ExtResource("8_hckvv"), ExtResource("9_1vopd")])
 color = Color(0.3, 0.75, 0.4, 1)
-model_scene = ExtResource("3_pm6qe")
+model_scene = ExtResource("3_d1hwf")
 model_height = 1.55
-held_item = ExtResource("1_321t1")
+held_item = ExtResource("1_s1850")
 held_item_bone = "Grip.L"

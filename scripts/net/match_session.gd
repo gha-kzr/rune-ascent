@@ -11,7 +11,8 @@ extends RefCounted
 ## any other); the same player can come back with their token and gets the hero back at a safe moment.
 ## Time only moves through tick(), so tests decide when time passes.
 ##
-## Messages ("m"): hello, entry, entries, submit, reject, refused, redirect, pull, elected, have, ping, bye.
+## Messages ("m"): hello, entry, entries, submit, reject, refused, redirect, pull, elected, have, ping, bye; and for
+## show only: emote, mark, shown (my screen caught up with my turn), clock (the host's turn clock).
 
 signal changed
 ## An entry went into the local state (the battle screen plays what it brings).
@@ -24,12 +25,17 @@ signal halted(reason: String)
 signal synced
 ## Another player sent an emote (a seat id and an emote number).
 signal emote_received(seat_id: int, emote_id: int)
+## A player put a mark on the board (a seat id and a cell); the screens show it to that player's team.
+signal mark_received(seat_id: int, cell: Vector2i)
 
 const PING_INTERVAL := 2.0
 const PEER_TIMEOUT := 8.0
 ## How many emotes there are, and how often a player may send one.
 const EMOTE_COUNT := 8
 const EMOTE_COOLDOWN := 1.5
+const MARK_COOLDOWN := 1.0
+## No board is wider than this (a mark's cell outside it is dropped).
+const MAX_MARK_CELL := 64
 const DEFAULT_AI_DELAY := 0.6
 const ELECTION_WAIT := 1.0
 ## Entries that carry the state's fingerprint, so a peer that drifted is noticed at once.
@@ -47,6 +53,10 @@ const ENTRY_FIELDS := {
 const MAX_FIELD_TEXT := 80
 ## Seconds each player has to place their hero before the fight starts (the host starts it when the time is up).
 const PLACEMENT_SECONDS := 30.0
+## The most a turn's clock gives back for the animations its player watched before getting control (see turn_shown).
+const PLAYBACK_CREDIT := 10.0
+## A spirit's turn (a fallen hero): one choice, so a short clock whatever the lobby's turn time.
+const SPIRIT_TURN_SECONDS := 10.0
 
 var transport: NetTransport
 var my_id := 0
@@ -72,6 +82,9 @@ var _dead: Dictionary[int, bool] = {}
 var _absent_since: Dictionary[int, float] = {}
 var _turn_unit := -2
 var _turn_elapsed := 0.0
+## This turn's player said their screen caught up (sent once), and the host gave the time back (once).
+var _shown_sent := false
+var _turn_credited := false
 var _placement_elapsed := 0.0
 var _ai_wait := 0.0
 var _electing := false
@@ -82,6 +95,7 @@ var _held: Array = []
 ## Peers I asked for entries (a catch-up pull): their `entries` are accepted from them.
 var _pulling: Dictionary[int, bool] = {}
 var _last_emote: Dictionary[int, float] = {}
+var _last_mark: Dictionary[int, float] = {}
 var _budget: Dictionary[int, float] = {}
 var _last_rehello: Dictionary[int, float] = {}
 ## Whether I am cut off from the others: my own connection is down, or every other player is gone.
@@ -214,6 +228,38 @@ func send_emote(emote_id: int) -> void:
 	emote_received.emit(my_id, emote_id)
 
 
+## A mark on the board for my team (not part of the match log: it is only for show). Everyone receives it, and each
+## screen shows it only to the marking player's team.
+func send_mark(cell: Vector2i) -> void:
+	if not _mark_cell_ok(cell) or not _cooled_down(_last_mark, my_id, MARK_COOLDOWN):
+		return
+	transport.broadcast({"m": "mark", "x": cell.x, "y": cell.y})
+	mark_received.emit(my_id, cell)
+
+
+func _on_mark(from: int, message: Dictionary) -> void:
+	var x: Variant = message.get("x")
+	var y: Variant = message.get("y")
+	if x is not int or y is not int or not state.seats.has(from):
+		return
+	var cell := Vector2i(x, y)
+	if _mark_cell_ok(cell) and _cooled_down(_last_mark, from, MARK_COOLDOWN):
+		mark_received.emit(from, cell)
+
+
+func _mark_cell_ok(cell: Vector2i) -> bool:
+	return cell.x >= 0 and cell.y >= 0 and cell.x < MAX_MARK_CELL and cell.y < MAX_MARK_CELL
+
+
+## Whether `seat_id` may send again (its last message is at least `cooldown` old); if so, now is its last one.
+func _cooled_down(last: Dictionary[int, float], seat_id: int, cooldown: float) -> bool:
+	var previous: float = last.get(seat_id, -100.0)
+	if _now - previous < cooldown and previous >= 0.0:
+		return false
+	last[seat_id] = _now
+	return true
+
+
 ## Lets the AI play my hero (to finish the fight without me), or takes it back.
 func hand_to_ai(on: bool) -> void:
 	propose({"k": "ai", "id": my_id, "v": on})
@@ -319,6 +365,9 @@ func _on_message(from: int, message: Dictionary) -> void:
 		"elected": _on_elected(from, message.get("host"), message.get("have"))
 		"have": _on_have(from, message.get("n"))
 		"emote": _on_emote(from, message.get("e"))
+		"mark": _on_mark(from, message)
+		"shown": _on_shown(from, message.get("u"))
+		"clock": _on_clock(from, message.get("u"), message.get("t"))
 		"bye": _on_peer_lost(from)
 
 
@@ -577,6 +626,41 @@ func _note_turn() -> void:
 	if unit != _turn_unit:
 		_turn_unit = unit
 		_turn_elapsed = 0.0
+		_shown_sent = false
+		_turn_credited = false
+
+
+## My screen has played everything up to my hero's turn and hands me the controls: the turn's clock gives back the
+## seconds those animations took (up to PLAYBACK_CREDIT), so a slow playback or a far relay doesn't eat my turn. Sent
+## once per turn; the host tells everyone the clock it settled on.
+func turn_shown(unit_id: int) -> void:
+	if unit_id != _turn_unit or _shown_sent or not controls_unit(unit_id):
+		return
+	_shown_sent = true
+	if is_host():
+		_credit_turn(my_id, unit_id)
+	else:
+		transport.send(host_id, {"m": "shown", "u": unit_id})
+
+
+func _on_shown(from: int, unit_id: Variant) -> void:
+	if is_host() and unit_id is int:
+		_credit_turn(from, unit_id)
+
+
+## The host gives the playback time back, once per turn and only to the player of the hero whose turn it is.
+func _credit_turn(from: int, unit_id: int) -> void:
+	if _turn_credited or unit_id != _turn_unit or state.seat_of_unit(unit_id) != from:
+		return
+	_turn_credited = true
+	_turn_elapsed -= minf(_turn_elapsed, PLAYBACK_CREDIT)
+	transport.broadcast({"m": "clock", "u": unit_id, "t": _turn_elapsed})
+
+
+## The host's turn clock: the others set theirs to it (their countdowns show the same seconds).
+func _on_clock(from: int, unit_id: Variant, elapsed: Variant) -> void:
+	if from == host_id and unit_id is int and unit_id == _turn_unit and (elapsed is float or elapsed is int):
+		_turn_elapsed = clampf(float(elapsed), 0.0, turn_limit())
 
 
 ## Seconds left to place heroes (-1 when the fight has begun or there is no battle).
@@ -590,7 +674,15 @@ func placement_seconds_left() -> float:
 func turn_seconds_left() -> float:
 	if state.battle == null or not state.battle.state.started or state.battle.state.is_over():
 		return -1.0
-	return maxf(0.0, float(state.settings["turn"]) - _turn_elapsed)
+	return maxf(0.0, turn_limit() - _turn_elapsed)
+
+
+## The seconds the current turn has: the lobby's turn time, or a spirit's short one.
+func turn_limit() -> float:
+	var unit := state.battle.state.turn_order.current_unit_id() if state.battle != null and state.battle.state.started else -1
+	if unit >= 0 and state.battle.state.units[unit].spirit:
+		return SPIRIT_TURN_SECONDS
+	return float(state.settings["turn"])
 
 
 # --- Losing peers and host swap -------------------------------------------------------------
@@ -723,7 +815,7 @@ func _host_tick(delta: float) -> void:
 		if _ai_wait >= ai_delay:
 			_ai_wait = 0.0
 			_play_for_ai(current)
-	elif _turn_elapsed >= float(state.settings["turn"]):
+	elif _turn_elapsed >= turn_limit():
 		var unit_id := state.unit_of_seat[current]
 		_host_submit(my_id, {"k": "act", "sys": true, "a": ActionCodec.encode(BattleActions.EndTurn.new(unit_id))})
 

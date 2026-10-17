@@ -1,23 +1,22 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://1yfybx7w8v0f"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_eb1r2"]
-[ext_resource type="PackedScene" uid="uid://ctih7u616r1vv" path="res://assets/models/sorceress.tscn" id="2_2wlfu"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_3c7sh"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_icqw2"]
-[ext_resource type="Resource" uid="uid://kgak6xyyp1mc" path="res://data/pvp/spells/sorc_firebolt.tres" id="5_df86d"]
-[ext_resource type="Resource" uid="uid://b3my14abu362c" path="res://data/pvp/spells/sorc_fireball.tres" id="6_pa7dm"]
-[ext_resource type="Resource" uid="uid://1kc57kv8ee0g" path="res://data/pvp/spells/sorc_frost_spike.tres" id="7_s8h5w"]
-[ext_resource type="Resource" uid="uid://dg8bvesd08aqy" path="res://data/pvp/spells/sorc_meteor.tres" id="8_jvocb"]
-[ext_resource type="Resource" uid="uid://b1rhahmfgsa2u" path="res://data/pvp/spells/sorc_blink.tres" id="9_csi4t"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_wci5o"]
+[ext_resource type="PackedScene" uid="uid://ctih7u616r1vv" path="res://assets/models/sorceress.tscn" id="2_eb1r2"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_2wlfu"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_3c7sh"]
+[ext_resource type="Resource" uid="uid://kgak6xyyp1mc" path="res://data/pvp/spells/sorc_firebolt.tres" id="5_icqw2"]
+[ext_resource type="Resource" uid="uid://b3my14abu362c" path="res://data/pvp/spells/sorc_fireball.tres" id="6_df86d"]
+[ext_resource type="Resource" uid="uid://b1rhahmfgsa2u" path="res://data/pvp/spells/sorc_blink.tres" id="7_pa7dm"]
+[ext_resource type="Resource" uid="uid://dg8bvesd08aqy" path="res://data/pvp/spells/sorc_meteor.tres" id="8_s8h5w"]
 
 [resource]
-script = ExtResource("3_3c7sh")
+script = ExtResource("3_2wlfu")
 display_name = "Sorceress"
 max_hp = 85
-ap = 7
+ap = 2
 mp = 4
 initiative = 105
-spells = Array[ExtResource("4_icqw2")]([ExtResource("5_df86d"), ExtResource("6_pa7dm"), ExtResource("7_s8h5w"), ExtResource("8_jvocb"), ExtResource("9_csi4t")])
+spells = Array[ExtResource("4_3c7sh")]([ExtResource("5_icqw2"), ExtResource("6_df86d"), ExtResource("7_pa7dm"), ExtResource("8_s8h5w")])
 color = Color(0.85, 0.4, 0.3, 1)
-model_scene = ExtResource("2_2wlfu")
+model_scene = ExtResource("2_eb1r2")
 model_height = 1.6

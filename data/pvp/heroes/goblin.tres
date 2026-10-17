@@ -8,6 +8,6 @@
 script = ExtResource("2_yatb6")
 unit = ExtResource("3_wlisg")
 role_label = "Bomb thrower"
-description = "Fast, sneaky and reckless: bombs and dynamite hurt everyone around, friends included. Steals action points."
+description = "Fast and reckless: throws bombs and dynamite, and rockets himself across the board."
 gender = 2
 ai_positioning = ExtResource("1_mmnag")

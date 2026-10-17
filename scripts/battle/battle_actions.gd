@@ -18,7 +18,7 @@ extends RefCounted
 			return "the battle hasn't started"
 		if actor_id < 0 or actor_id >= state.units.size():
 			return "unknown unit %d" % actor_id
-		if not state.units[actor_id].is_alive():
+		if not state.units[actor_id].can_act():
 			return "unit %d is dead" % actor_id
 		if state.turn_order.current_unit_id() != actor_id:
 			return "it is not unit %d's turn" % actor_id
@@ -41,6 +41,8 @@ class Move extends Action:
 		destination = cell
 
 	func _validate(state: BattleState) -> String:
+		if state.units[actor_id].spirit:
+			return "a spirit doesn't walk"
 		# As the player sees the board: a hidden enemy doesn't stop the move from being asked for (it is found by walking into it).
 		if not Movement.reach(state, actor_id, true).can_reach(destination):
 			return "can't reach %s" % destination

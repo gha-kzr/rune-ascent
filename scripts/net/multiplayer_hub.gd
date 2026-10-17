@@ -29,10 +29,12 @@ var _token_retried := false
 
 
 func _process(delta: float) -> void:
+	# Real seconds: a fight played fast speeds the scene up (Engine.time_scale), never the turn clock or the timeouts.
+	var real := delta / Engine.time_scale if Engine.time_scale > 0.0 else delta
 	if transport != null:
-		transport.poll(delta)
+		transport.poll(real)
 	if session != null:
-		session.tick(delta)
+		session.tick(real)
 
 
 # --- Opening or joining a match -------------------------------------------------------------

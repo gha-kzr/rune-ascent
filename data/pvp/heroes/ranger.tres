@@ -8,5 +8,5 @@
 script = ExtResource("2_ts2ia")
 unit = ExtResource("3_m6h5x")
 role_label = "Mobile sharpshooter"
-description = "Shoots from far away, slows and marks targets, and leaps back out of reach. Weak when caught."
+description = "Shoots from far away, pins a target to the ground and leaps back out of reach. Weak when caught."
 ai_positioning = ExtResource("1_4ibq3")

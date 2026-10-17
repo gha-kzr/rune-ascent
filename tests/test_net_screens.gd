@@ -112,12 +112,12 @@ func test_hero_cards_show_what_the_hero_is_and_does() -> void:
 	for index in PvpHeroes.hero_count():
 		var info := PvpHeroes.summary(index)
 		assert_true(info["hp"] > 0 and info["ap"] > 0 and info["mp"] > 0)
-		assert_eq(info["spell_icons"].size(), 5, "its five spells")
+		assert_eq(info["spell_icons"].size(), 4, "its four spells")
 		assert_false(str(info["role"]).is_empty())
 	assert_false(str(PvpHeroes.summary(0)["description"]).is_empty())
 	var card := NetUi.hero_card(0, true, func(_i: int) -> void: pass)
 	assert_true(card.button_pressed and card.toggle_mode)
-	assert_true(card.find_children("*", "TextureRect", true, false).size() == 5)
+	assert_true(card.find_children("*", "TextureRect", true, false).size() == 4)
 	card.free()
 
 
@@ -304,7 +304,7 @@ func test_the_info_button_opens_the_hero_stats_and_spells_without_picking_it() -
 	assert_true(popup != null, "the popup opened")
 	assert_eq(picked, [], "the card was not picked")
 	var info := PvpHeroes.details(0)
-	assert_eq(info["spells"].size(), 5)
+	assert_eq(info["spells"].size(), 4)
 	for spell: Dictionary in info["spells"]:
 		assert_false(spell["lines"].is_empty(), "each spell says what it does")
 	assert_false(info.has("power") or info.has("resistances"), "Power and resistances mean nothing in PvP: hidden")
@@ -495,7 +495,7 @@ func test_changing_the_map_or_the_rules_leaves_the_players_ready_on_every_screen
 
 
 func test_a_new_match_takes_45_seconds_a_turn() -> void:
-	assert_eq(MatchState.new().settings["turn"], 45)
+	assert_eq(MatchState.new().settings["turn"], 30)
 
 
 func test_the_lobby_opens_with_the_hero_the_player_likes() -> void:

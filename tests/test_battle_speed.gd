@@ -42,15 +42,18 @@ func test_the_settings_are_saved_and_a_bad_value_is_ignored() -> void:
 	var store := SettingsStore.new(PATH)
 	var settings := Settings.new()
 	settings.battle_speed = Settings.BattleSpeed.INSTANT
-	settings.auto_end_turn = true
+	settings.net_battle_speed = Settings.BattleSpeed.NORMAL
+	settings.auto_end_turn = false
 	assert_true(store.save(settings))
 	var loaded := store.load_or_default()
-	assert_eq([loaded.battle_speed, loaded.auto_end_turn], [Settings.BattleSpeed.INSTANT, true])
+	assert_eq([loaded.battle_speed, loaded.net_battle_speed, loaded.auto_end_turn],
+			[Settings.BattleSpeed.INSTANT, Settings.BattleSpeed.NORMAL, false])
 	var file := FileAccess.open(PATH, FileAccess.WRITE)
-	file.store_string("[gameplay]\nbattle_speed=9\nauto_end_turn=\"yes\"\n")
+	file.store_string("[gameplay]\nbattle_speed=9\nnet_battle_speed=-1\nauto_end=\"yes\"\nauto_end_turn=false\n")
 	file.close()
 	loaded = store.load_or_default()
-	assert_eq([loaded.battle_speed, loaded.auto_end_turn], [Settings.BattleSpeed.NORMAL, false])
+	assert_eq([loaded.battle_speed, loaded.net_battle_speed, loaded.auto_end_turn],
+			[Settings.BattleSpeed.NORMAL, Settings.BattleSpeed.FAST, true], "the defaults (the old auto end key is ignored)")
 
 
 func test_the_hud_button_cycles_the_speed_and_fast_scales_time_and_gives_it_back() -> void:

@@ -7,7 +7,7 @@ Chosen by the project owner by ear from samplers of candidates. Each was downloa
 
 | Pack | Page | Archive SHA-256 | Files used |
 |---|---|---|---|
-| Interface Sounds | https://kenney.nl/assets/interface-sounds | `f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232` | `click_001` → `sfx/ui_click.ogg` |
+| Interface Sounds | https://kenney.nl/assets/interface-sounds | `f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232` | `click_001` → `sfx/ui_click.ogg`, `select_006` → `sfx/turn_warning.ogg` |
 | Impact Sounds | https://kenney.nl/assets/impact-sounds | `029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8` | `impactPlate_medium_001` → `sfx/hit.ogg`, `footstep_grass_000` → `sfx/step.ogg` |
 | Music Jingles | https://kenney.nl/assets/music-jingles | `b729ba57959bd58793d2c5cafa348aaf2655d354f3da35ec4729e03ec77197b8` | `jingles_STEEL13` → `sfx/defeat.ogg` |
 

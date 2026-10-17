@@ -141,7 +141,8 @@ red for the last ten. The spell bar (or the card hand) always shows the player's
 ## Fairness and rules
 
 - Classes: nine PvP classes of their own (`data/pvp/`, see `docs/decisions/2026-10-06-pvp-classes.md`): Knight, Ranger,
-  Sorceress, Necromancer, Rogue, Priestess, Goblin, Wraith and Monk, each with five spells at a fixed strength. No levels,
+  Sorceress, Necromancer, Rogue, Priestess, Goblin, Wraith and Monk, each with four spells at 1 AP and 2 AP a turn
+  (`docs/decisions/2026-10-17-simple-pvp-kits.md`), at a fixed strength and without resistances. No levels,
   no runes, no Power (the spell numbers are what they show), so unit cards show no Power or resistances. Duplicates are
   allowed. Some classes use stealth (the Rogue's Vanish): the hero is hidden from the other
   team (its own team always sees it) until it attacks, is hurt, or an enemy **walks into it**. Standing next to it shows
@@ -150,14 +151,24 @@ red for the last ten. The spell bar (or the card hand) always shows the player's
   (`Movement.reach(..., as_seen := true)`): a hero they can't see leaves no hole and no shadow behind it. The walk is the
   cheapest one as the player sees it, so it may cross the hidden hero's cell: then the walker stops on the cell before it,
   pays only the steps it took, loses 10 % of its max HP (`BattleActions.Move.BUMP_DAMAGE_PERCENT`), and the hidden hero is
-  found (its stealth ends). That is how a hidden hero is discovered, and its place is never given away for free. Allies see
+  found (its stealth ends). That is how a hidden hero is discovered, and its place is never given away for free. For the
+  same reason a hidden hero blocks nobody's line of sight (`Targeting._blocks`): the shaded cells behind it would show
+  where it stands. Allies see
   a hidden hero drawn see-through (about 45 % opaque, with a faint cool tint: `UnitModel.set_ghost`), with its Hidden status icon;
   it turns solid again when it is found or the status ends. This is a rule and a display choice only; every player's client
   holds the whole match.
 - Maps: the same shapes as the tower's (open field, mountain, crater, islands, canyon, ruins), made *symmetric under a
   half turn* with a 3 x 3 start zone for each side (`PvpMap`), so neither side is favoured; the map is drawn again on every
   peer from three numbers (shape, size, seed), and the lobby previews it with the QA map preview.
-- Turns: initiative order over all heroes; a turn timer (host setting, 45 s by default) ends an idle player's turn.
+- Turns: initiative order over all heroes; a turn timer (host setting, 30 s by default) ends an idle player's turn. The
+  host's clock decides; it starts when the entry that begins the turn is applied, so the turn's player would lose the
+  time their screen spends playing the previous animations. Their screen says when it hands them the controls
+  (`MatchSession.turn_shown` → `shown` message), and the host gives that time back once per turn, up to
+  `PLAYBACK_CREDIT` (10 s), then tells everyone the clock it settled on (`clock`). Session time is real time
+  (`MultiplayerHub` divides out `Engine.time_scale`), so each player can watch at their own speed.
+- Marks and quick messages are not in the log: `emote` and `mark` messages go to everyone (rate-limited per sender), and
+  each screen shows a mark only if the sender is on its side. A modified client could read the other team's marks;
+  they are a convenience, not a secret.
 - Sudden death from round 40 (every hero loses 10 % of max HP at its turn start) so a stalled fight always ends.
 
 ## Hosting
@@ -182,7 +193,7 @@ open the game with `?relay=ws://127.0.0.1:8787` (a desktop build reads the `RELA
 
 ## Known limits
 
-- Up to 12 players (6 per side); no spectators; no chat (quick emotes only).
+- Up to 12 players (6 per side); no spectators; no chat (quick emotes and marks only).
 - Placement lasts at most 30 seconds (a fixed time): the host then starts the fight with the heroes where they stand.
 - The relay is one free Render instance: the first game after a quiet quarter of an hour waits up to a minute for it, and a
   restart of the service drops the rooms (players reconnect by themselves; an empty room is gone).

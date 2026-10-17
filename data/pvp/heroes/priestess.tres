@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_8pa7m")
 unit = ExtResource("3_06ue1")
-role_label = "Healer and support"
-description = "Heals, cleanses and blesses her team for extra action points. Her own damage is very low, and she cannot heal herself with Healing Touch."
+role_label = "Healer"
+description = "The only healer: mends her allies and pulls them out of danger. Her holy light burns whoever comes close. She cannot heal herself."
 gender = 1
 ai_positioning = ExtResource("1_oxm4u")

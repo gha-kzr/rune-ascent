@@ -1,23 +1,22 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bf2wnrwtlnslb"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_uuvep"]
-[ext_resource type="PackedScene" uid="uid://2lxy13smlrff" path="res://assets/models/goblin.tscn" id="2_ekh62"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_bnt7a"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_xlit6"]
-[ext_resource type="Resource" uid="uid://dmm1as5wdny71" path="res://data/pvp/spells/goblin_sling.tres" id="5_mxqr7"]
-[ext_resource type="Resource" uid="uid://bcm57uam8q7t3" path="res://data/pvp/spells/goblin_bomb.tres" id="6_o0n38"]
-[ext_resource type="Resource" uid="uid://ubx2uw7nj8to" path="res://data/pvp/spells/goblin_pickpocket.tres" id="7_6v637"]
-[ext_resource type="Resource" uid="uid://br8lhq10ev8bl" path="res://data/pvp/spells/goblin_scamper.tres" id="8_i3aah"]
-[ext_resource type="Resource" uid="uid://k5n82o75jno2" path="res://data/pvp/spells/goblin_dynamite.tres" id="9_0afnk"]
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_0b28k"]
+[ext_resource type="PackedScene" uid="uid://2lxy13smlrff" path="res://assets/models/goblin.tscn" id="2_uuvep"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_ekh62"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_bnt7a"]
+[ext_resource type="Resource" uid="uid://dmm1as5wdny71" path="res://data/pvp/spells/goblin_sling.tres" id="5_xlit6"]
+[ext_resource type="Resource" uid="uid://bcm57uam8q7t3" path="res://data/pvp/spells/goblin_bomb.tres" id="6_mxqr7"]
+[ext_resource type="Resource" uid="uid://1wlukxkklgx5" path="res://data/pvp/spells/goblin_rocket.tres" id="7_o0n38"]
+[ext_resource type="Resource" uid="uid://k5n82o75jno2" path="res://data/pvp/spells/goblin_dynamite.tres" id="8_6v637"]
 
 [resource]
-script = ExtResource("3_bnt7a")
+script = ExtResource("3_ekh62")
 display_name = "Goblin"
 max_hp = 100
-ap = 7
+ap = 2
 mp = 6
 initiative = 120
-spells = Array[ExtResource("4_xlit6")]([ExtResource("5_mxqr7"), ExtResource("6_o0n38"), ExtResource("7_6v637"), ExtResource("8_i3aah"), ExtResource("9_0afnk")])
+spells = Array[ExtResource("4_bnt7a")]([ExtResource("5_xlit6"), ExtResource("6_mxqr7"), ExtResource("7_o0n38"), ExtResource("8_6v637")])
 color = Color(0.45, 0.7, 0.25, 1)
-model_scene = ExtResource("2_ekh62")
+model_scene = ExtResource("2_uuvep")
 model_height = 1.0

@@ -21,6 +21,9 @@ msgstr "%d PA"
 msgid "%d MP"
 msgstr "%d PM"
 
+msgid "%d of the %d cards in the deck"
+msgstr "%d des %d cartes du deck"
+
 msgid "%d turn"
 msgid_plural "%d turns"
 msgstr[0] "%d tour"
@@ -76,9 +79,6 @@ msgstr "%s PA"
 
 msgid "%s area %d"
 msgstr "Zone %s %d"
-
-msgid "%s card: %d of %d in the deck"
-msgstr "%s carte : %d sur %d dans le paquet"
 
 msgid "%s cleared"
 msgstr "%s terminé"
@@ -167,6 +167,15 @@ msgstr "%s%% résistance (%s)"
 msgid "%s%% damage taken"
 msgstr "%s%% de dégâts subis"
 
+msgid "%s's spirit"
+msgstr "Esprit de %s"
+
+msgid "%s's spirit: %s"
+msgstr "Esprit de %s : %s"
+
+msgid "%s's spirit: %s on %s"
+msgstr "Esprit de %s : %s sur %s"
+
 msgid "%s's turn"
 msgstr "Tour de %s"
 
@@ -181,6 +190,12 @@ msgstr "%s : %s.\nRareté : %s (une par héros). Cliquez pour équiper sur le h�
 
 msgid "%s: %s.\n%s rune. Click to equip on the selected hero."
 msgstr "%s : %s.\nRareté : %s. Cliquez pour équiper sur le héros sélectionné."
+
+msgid "%s: Here!"
+msgstr "%s : ici !"
+
+msgid "%s: point out to your team what is under the mouse"
+msgstr "%s : montrer à votre équipe ce qui est sous la souris"
 
 msgid "(AI)"
 msgstr "(IA)"
@@ -214,6 +229,9 @@ msgstr "1 action"
 
 msgid "A boss floor! The boss is much stronger. Winning offers a boon (a bonus for the whole run) or a full heal."
 msgstr "Un étage de boss ! Le boss est bien plus fort. Le vaincre offre un bienfait (un bonus pour toute l'ascension) ou un soin complet."
+
+msgid "A fallen hero keeps its turns as a spirit: once a turn, it curses or roots an enemy, or reveals hidden ones. Off: the fallen only watch."
+msgstr "Un héros tombé garde ses tours sous forme d'esprit : à chaque tour, il maudit ou enracine un ennemi, ou révèle les invisibles. Désactivé : les morts ne font que regarder."
 
 msgid "A hero gained a level: its stats grow, and some levels teach a new spell."
 msgstr "Un héros a gagné un niveau : ses stats augmentent, et certains niveaux enseignent un nouveau sort."
@@ -263,6 +281,9 @@ msgstr "PA 0 / 0"
 msgid "AP: action points. Each spell costs some; they refill every turn."
 msgstr "PA : points d'action. Chaque sort en coûte ; ils se rechargent à chaque tour."
 
+msgid "Areas and control"
+msgstr "Zones et contrôle"
+
 msgid "Arrow"
 msgstr "Flèche"
 
@@ -310,15 +331,6 @@ msgstr "Meilleur étage : %d"
 
 msgid "Bite"
 msgstr "Morsure"
-
-msgid "Bleeding"
-msgstr "Saignement"
-
-msgid "Blessed"
-msgstr "Béni"
-
-msgid "Blessing"
-msgstr "Bénédiction"
 
 msgid "Blink"
 msgstr "Clignement"
@@ -368,9 +380,6 @@ msgstr "Cogneur : frappe fort au corps à corps et fonce sur les héros."
 msgid "Brute"
 msgstr "Brute"
 
-msgid "Bulwark"
-msgstr "Rempart"
-
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -394,8 +403,8 @@ msgstr "Charge"
 msgid "Charges in a straight line next to the target"
 msgstr "Charge en ligne droite jusqu'à la cible"
 
-msgid "Charges in, bashes enemies out of position and shrugs off blows with Guard. Slow to reach, hard to remove."
-msgstr "Fonce dans le tas, repousse les ennemis et encaisse les coups avec Garde. Lent à atteindre, difficile à déloger."
+msgid "Charges in every turn, bashes enemies out of position and sweeps around him. Hard to remove."
+msgstr "Charge à chaque tour, repousse les ennemis de leur position et balaie autour de lui. Difficile à abattre."
 
 msgid "Chill Touch"
 msgstr "Toucher glacial"
@@ -426,6 +435,9 @@ msgstr "Terminez d'abord l'épreuve précédente."
 
 msgid "Clear tower floor %d first."
 msgstr "Terminez d'abord l'étage %d de la tour."
+
+msgid "Click a cell or a unit to point it out to your team (Esc to cancel)"
+msgstr "Cliquez une case ou une unité pour la montrer à votre équipe (Échap pour annuler)"
 
 msgid "Click a teal cell to place %s (Esc to deselect)"
 msgstr "Cliquez sur une case turquoise pour placer %s (Échap pour désélectionner)"
@@ -496,8 +508,11 @@ msgstr "Coup handicapant"
 msgid "Cross"
 msgstr "Croix"
 
-msgid "Curses and poison"
-msgstr "Malédictions et poison"
+msgid "Curse"
+msgstr "Malédiction"
+
+msgid "Cursed"
+msgstr "Maudit"
 
 msgid "Dagger Strike"
 msgstr "Coup de dague"
@@ -517,17 +532,14 @@ msgstr "Dévorer"
 msgid "Display"
 msgstr "Affichage"
 
-msgid "Drain Will"
-msgstr "Drain de volonté"
-
-msgid "Drained"
-msgstr "Drainé"
-
 msgid "Draw pile %d · Discard pile %d"
 msgstr "Pioche %d · Défausse %d"
 
 msgid "Dread"
 msgstr "Effroi"
+
+msgid "Drifts through walls, drags its victims close with an icy grasp and wails at everyone around."
+msgstr "Traverse les murs, attire ses victimes d'une étreinte glaciale et hurle sur tout ce qui l'entoure."
 
 msgid "Dynamite"
 msgstr "Dynamite"
@@ -592,8 +604,8 @@ msgstr "bords opposés"
 msgid "Fast (x2)"
 msgstr "Rapide (x2)"
 
-msgid "Fast, sneaky and reckless: bombs and dynamite hurt everyone around, friends included. Steals action points."
-msgstr "Rapide, sournois et téméraire : bombes et dynamite blessent tout le monde autour, amis compris. Vole des points d'action."
+msgid "Fast and reckless: throws bombs and dynamite, and rockets himself across the board."
+msgstr "Rapide et imprudent : lance bombes et dynamite, et se propulse d'un bout à l'autre du terrain."
 
 msgid "Feast"
 msgstr "Festin"
@@ -694,8 +706,8 @@ msgstr "Givre"
 msgid "Frost Lance"
 msgstr "Lance de givre"
 
-msgid "Frost Spike"
-msgstr "Pointe de givre"
+msgid "Frozen Grasp"
+msgstr "Étreinte glaciale"
 
 msgid "Full heal — every hero back to full HP"
 msgstr "Soin complet — chaque héros retrouve tous ses PV"
@@ -763,9 +775,6 @@ msgstr "Tir grappin"
 msgid "Grasping Dead"
 msgstr "Mains des morts"
 
-msgid "Grave Chill"
-msgstr "Froid tombal"
-
 msgid "Ground Slam"
 msgstr "Fracas du sol"
 
@@ -778,14 +787,14 @@ msgstr "Protégé"
 msgid "Hamstring"
 msgstr "Coup de jarret"
 
-msgid "Hasty"
-msgstr "Hâte"
+msgid "Haunter"
+msgstr "Hanteur"
 
 msgid "Heal the heroes"
 msgstr "Soigner les héros"
 
-msgid "Healer and support"
-msgstr "Soigneuse et soutien"
+msgid "Healer"
+msgstr "Soigneuse"
 
 msgid "Healing Touch"
 msgstr "Toucher guérisseur"
@@ -795,9 +804,6 @@ msgstr "soigne %s"
 
 msgid "heals %s (%d%% Power)"
 msgstr "soigne %s (%d%% Puissance)"
-
-msgid "Heals, cleanses and blesses her team for extra action points. Her own damage is very low, and she cannot heal herself with Healing Touch."
-msgstr "Soigne, purifie et bénit son équipe pour des points d'action en plus. Ses dégâts sont très faibles, et elle ne peut pas se soigner avec Toucher guérisseur."
 
 msgid "Hello!"
 msgstr "Salut !"
@@ -813,6 +819,9 @@ msgstr "caché des ennemis jusqu'à ce qu'il attaque ou soit blessé (sauf si l'
 
 msgid "Hints will show again."
 msgstr "Les astuces s'afficheront à nouveau."
+
+msgid "Hits groups, drags enemies out of their lines and pins them in place with the dead's hands."
+msgstr "Frappe les groupes, arrache les ennemis à leurs lignes et les cloue sur place avec les mains des morts."
 
 msgid "Holy"
 msgstr "Sacré"
@@ -832,9 +841,6 @@ msgstr "PV %d · PA %d · PM %d"
 msgid "HP: health. At 0 the unit falls."
 msgstr "PV : points de vie. À 0, l'unité tombe."
 
-msgid "Hunted"
-msgstr "Traqué"
-
 msgid "Hunter's Mark"
 msgstr "Marque du chasseur"
 
@@ -849,9 +855,6 @@ msgstr "Initiative %d, dégâts subis %+d%%"
 
 msgid "Initiative: the higher it is, the earlier the unit plays."
 msgstr "Initiative : plus elle est haute, plus l'unité joue tôt."
-
-msgid "Inner Peace"
-msgstr "Paix intérieure"
 
 msgid "Instant (skip animations)"
 msgstr "Instantané (sans animations)"
@@ -930,12 +933,6 @@ msgstr "Niveau 30"
 msgid "Level up! (+%d XP)"
 msgstr "Niveau supérieur ! (+%d XP)"
 
-msgid "Life Siphon"
-msgstr "Siphon de vie"
-
-msgid "Light fingers"
-msgstr "Doigts agiles"
-
 msgid "Line"
 msgstr "Ligne"
 
@@ -971,9 +968,6 @@ msgstr "Salon de la partie"
 
 msgid "Mend"
 msgstr "Soin"
-
-msgid "Mending Rain"
-msgstr "Pluie réparatrice"
 
 msgid "Menu"
 msgstr "Menu"
@@ -1152,9 +1146,6 @@ msgstr "choisissez d'abord une équipe"
 msgid "Pick at least one enemy."
 msgstr "Choisissez au moins un ennemi."
 
-msgid "Pickpocket"
-msgstr "Vol à la tire"
-
 msgid "Piercing Thrust"
 msgstr "Estocade perçante"
 
@@ -1167,9 +1158,6 @@ msgstr "Tir clouant"
 msgid "Place your heroes: click one, then a teal cell. Ready (%s) to fight"
 msgstr "Placez vos héros : cliquez sur l'un, puis sur une case turquoise. Prêt (%s) pour combattre"
 
-msgid "Plague"
-msgstr "Peste"
-
 msgid "Plague Bolt"
 msgstr "Trait de peste"
 
@@ -1181,6 +1169,12 @@ msgstr "Bac à sable"
 
 msgid "Plays %d / %d"
 msgstr "Actions %d / %d"
+
+msgid "Point out (%s)"
+msgstr "Montrer (%s)"
+
+msgid "Point out (multiplayer)"
+msgstr "Montrer (multijoueur)"
 
 msgid "Poison"
 msgstr "Poison"
@@ -1226,9 +1220,6 @@ msgid_plural "Pulls up to %d cells closer"
 msgstr[0] "Attire de %d case"
 msgstr[1] "Attire de %d cases au plus"
 
-msgid "Purify"
-msgstr "Purification"
-
 msgid "Pushes back %d cell"
 msgid_plural "Pushes back %d cells"
 msgstr[0] "Repousse de %d case"
@@ -1252,14 +1243,17 @@ msgstr "QA : étage %d"
 msgid "QA: playground"
 msgstr "QA : bac à sable"
 
-msgid "Quick on its feet: kicks in, pulls enemies close, sweeps them away and recovers on the spot."
-msgstr "Vif sur ses jambes : fonce, attire les ennemis, les balaie et récupère sur place."
+msgid "Quick on its feet: kicks in, pulls enemies close and sweeps them away."
+msgstr "Vif sur ses appuis : arrive d'un coup de pied, attire les ennemis et les balaie."
 
 msgid "Quick team (level 0: left out)"
 msgstr "Équipe rapide (niveau 0 : absent)"
 
 msgid "Quit"
 msgstr "Quitter"
+
+msgid "Radiance"
+msgstr "Rayonnement"
 
 msgid "Range %s"
 msgstr "Portée %s"
@@ -1330,9 +1324,6 @@ msgstr "Rendre PA et PM"
 msgid "Regeneration"
 msgstr "Régénération"
 
-msgid "Regrowth"
-msgstr "Régénération vive"
-
 msgid "Remove"
 msgstr "Retirer"
 
@@ -1351,6 +1342,9 @@ msgstr "Lacérer"
 msgid "Repulse"
 msgstr "Répulsion"
 
+msgid "Rescue"
+msgstr "Sauvetage"
+
 msgid "Reset keys"
 msgstr "Réinitialiser les touches"
 
@@ -1363,8 +1357,14 @@ msgstr "Résistance : %s"
 msgid "Resistance: percent less damage of one type (never more than three quarters for heroes; an enemy can be immune)."
 msgstr "Résistance : pourcentage de dégâts en moins d'un type (jamais plus des trois quarts pour les héros ; un ennemi peut être immunisé)."
 
-msgid "Robbed"
-msgstr "Dépouillé"
+msgid "Reveal"
+msgstr "Révélation"
+
+msgid "reveals hidden units"
+msgstr "révèle les unités invisibles"
+
+msgid "Rocket Jump"
+msgstr "Saut-fusée"
 
 msgid "Rogue"
 msgstr "Voleuse"
@@ -1378,14 +1378,11 @@ msgstr "Code de salle, ou lien de salle"
 msgid "Room code: %s"
 msgstr "Code de la salle : %s"
 
+msgid "Root"
+msgstr "Enracinement"
+
 msgid "Rooted"
 msgstr "Enraciné"
-
-msgid "Rot"
-msgstr "Pourriture"
-
-msgid "Rot Curse"
-msgstr "Malédiction de pourriture"
 
 msgid "Round %d"
 msgstr "Round %d"
@@ -1447,9 +1444,6 @@ msgstr "Sauvegarde effacée."
 msgid "Say something"
 msgstr "Dire quelque chose"
 
-msgid "Scamper"
-msgstr "Détalage"
-
 msgid "Seconds before the AI replaces a player who left"
 msgstr "Secondes avant que l'IA remplace un joueur parti"
 
@@ -1480,14 +1474,11 @@ msgstr "Mur de boucliers"
 msgid "Shielded"
 msgstr "Abrité"
 
-msgid "Shoots from far away, slows and marks targets, and leaps back out of reach. Weak when caught."
-msgstr "Tire de loin, ralentit et marque ses cibles, et bondit hors de portée. Faible quand on l'attrape."
+msgid "Shoots from far away, pins a target to the ground and leaps back out of reach. Weak when caught."
+msgstr "Tire de loin, cloue une cible au sol et bondit hors de portée. Fragile au contact."
 
 msgid "Show hints again"
 msgstr "Réafficher les astuces"
-
-msgid "Shrugs off most physical attacks, but holy light burns it. Drains life, chills and terrifies."
-msgstr "Ignore presque tous les coups physiques, mais la lumière sacrée le brûle. Draine la vie, glace et terrifie."
 
 msgid "Side view (%s)"
 msgstr "Vue de côté (%s)"
@@ -1519,9 +1510,6 @@ msgstr "Entaille"
 msgid "Slingshot"
 msgstr "Fronde"
 
-msgid "Slowed"
-msgstr "Ralenti"
-
 msgid "Smash"
 msgstr "Écrasement"
 
@@ -1533,6 +1521,9 @@ msgstr "Solo"
 
 msgid "Sorceress"
 msgstr "Sorcière"
+
+msgid "Soul Pull"
+msgstr "Attraction d'âme"
 
 msgid "Spectral Touch"
 msgstr "Toucher spectral"
@@ -1576,8 +1567,8 @@ msgstr "Les sorts coûtent des PA. Choisissez-en un (ou appuyez sur son numéro)
 msgid "Spells that hurt (damage, harmful statuses) also hit your own team, and you can hit yourself with an area. Off: they only hit enemies."
 msgstr "Les sorts qui font mal (dégâts, états nuisibles) touchent aussi votre équipe, et une zone peut vous toucher vous-même. Désactivé : ils ne touchent que les ennemis."
 
-msgid "Spirit"
-msgstr "Esprit"
+msgid "Spirits"
+msgstr "Esprits"
 
 msgid "Spore Bolt"
 msgstr "Trait de spores"
@@ -1750,6 +1741,9 @@ msgstr "le journal du match est plein"
 msgid "the match refused you"
 msgstr "la partie vous a refusé"
 
+msgid "The only healer: mends her allies and pulls them out of danger. Her holy light burns whoever comes close. She cannot heal herself."
+msgstr "La seule soigneuse : soigne ses alliés et les tire hors de danger. Sa lumière sacrée brûle qui s'approche. Elle ne peut pas se soigner elle-même."
+
 msgid "The party is fully healed."
 msgstr "L'équipe est entièrement soignée."
 
@@ -1761,6 +1755,9 @@ msgstr "L'équipe rapide n'a aucun héros (tous les niveaux sont à 0)."
 
 msgid "The tower is invalid: %s"
 msgstr "La tour est invalide : %s"
+
+msgid "Then click a cell or a unit: your team sees a mark there. Faster: the key, with the mouse over it"
+msgstr "Puis cliquez une case ou une unité : votre équipe y voit un repère. Plus rapide : la touche, la souris dessus"
 
 msgid "These change your save (press twice to confirm)."
 msgstr "Ces outils modifient votre sauvegarde (appuyez deux fois pour confirmer)."
@@ -1819,9 +1816,6 @@ msgstr "Ordre de jeu"
 msgid "UI scale"
 msgstr "Échelle de l'interface"
 
-msgid "Uncommon"
-msgstr "Peu commun"
-
 msgid "Unit"
 msgstr "Unité"
 
@@ -1863,9 +1857,6 @@ msgstr "Réveil du serveur de jeu... (il dort quand personne ne joue : la premi�
 
 msgid "Warg"
 msgstr "Warg"
-
-msgid "Wears enemies down with poison and rot, roots them, slows them and steals their action points. Little burst, no healing."
-msgstr "Use ses ennemis par le poison et la pourriture, les enracine, les ralentit et leur vole des points d'action. Peu de dégâts d'un coup, aucun soin."
 
 msgid "When you are done, end your turn ({end_turn}). The enemies play next."
 msgstr "Quand vous avez fini, terminez votre tour ({end_turn}). Les ennemis jouent ensuite."
@@ -1951,5 +1942,14 @@ msgstr "votre prochain tour"
 msgid "Your player"
 msgstr "Votre joueur"
 
+msgid "Your spirit's turn!"
+msgstr "Au tour de votre esprit !"
+
+msgid "Your spirit: one spell anywhere on the board (%s), or pass (%s)"
+msgstr "Votre esprit : un sort n'importe où sur le plateau (%s), ou passer (%s)"
+
 msgid "your team"
 msgstr "votre équipe"
+
+msgid "Your turn!"
+msgstr "À vous de jouer !"

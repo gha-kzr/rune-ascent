@@ -82,6 +82,6 @@ func after_each_clean() -> void:
 func test_hint_texts_name_the_bound_key() -> void:
 	var step := Tutorial.BATTLE_STEPS[0]
 	assert_true(Tutorial.text_of(step).contains("Ready (Space)"), Tutorial.text_of(step))
-	SettingsApplier.set_binding(Settings.new(), &"end_turn", KEY_G)
-	assert_true(Tutorial.text_of(step).contains("Ready (G)"), Tutorial.text_of(step))
+	SettingsApplier.set_binding(Settings.new(), &"end_turn", KEY_J)
+	assert_true(Tutorial.text_of(step).contains("Ready (J)"), Tutorial.text_of(step))
 	assert_false(Tutorial.text_of(step).contains("{"), "no placeholder left")

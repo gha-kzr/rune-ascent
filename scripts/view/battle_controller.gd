@@ -42,6 +42,8 @@ const START_FOCUS_TOWARD_ZONE := 0.35
 const FAST_TIME_SCALE := 2.0
 ## Pause before the turn ends by itself (auto end turn), so the player sees what happened.
 const AUTO_END_DELAY := 0.5
+## The same in card combat: long enough to throw cards away after the last play (each throw starts it again).
+const AUTO_END_CARDS_DELAY := 2.5
 ## How long the camera takes to reach an enemy that starts its turn off screen.
 const ENEMY_FOCUS_DURATION := 0.45
 
@@ -67,12 +69,20 @@ var selected_card := -1
 var _hovered_cell := BoardView.NO_CELL
 var _reach: Movement.Reach
 var _targetable: Dictionary[Vector2i, bool] = {}
+## While aiming: the cells in range that can't be aimed at (shaded); a click there keeps the aim.
+var _blocked: Dictionary[Vector2i, bool] = {}
 ## The hero selected for placement (a unit id), or -1.
 var _placing_hero := -1
 ## The unit whose card is pinned (a unit id), or -1; only the card's ✕ or Esc unpins.
 var _pinned_unit := -1
 ## What the HUD displays, following the played events (see HudModel).
 var _hud_model: HudModel
+## The spell under the mouse in the HUD (null: none): its range shows on the board (see _update_spell_preview).
+var _hovered_spell: SpellData
+## Whether it is one of the spell bar's (cast by _spells_unit_id()), not a row of the inspect card (cast by its unit).
+var _hovered_spell_on_bar := false
+## The unit on the inspect card, or -1.
+var _inspected_unit := -1
 ## The unit whose turn-order chip the mouse is over, or -1: its cell counts as hovered.
 var _chip_unit := -1
 ## A left press started on the board (not on the HUD): its release may be a click.
@@ -94,6 +104,8 @@ var _battle_generation := 0
 var settings := Settings.new()
 ## Whether this controller set Engine.time_scale (so it gives it back).
 var _set_time_scale := false
+## Bumped each time the turn may end by itself: only the latest wait ends it.
+var _auto_end_serial := 0
 
 
 func _exit_tree() -> void:
@@ -136,6 +148,7 @@ func _ready() -> void:
 	$DirectionalLight3D.reparent(camera_rig)
 	hud.spell_selected.connect(select_spell)
 	hud.card_discarded.connect(discard_card)
+	hud.spell_hovered.connect(_on_spell_hovered)
 	hud.end_turn_pressed.connect(end_turn)
 	hud.view_toggle_pressed.connect(func() -> void: camera_rig.set_overhead(not camera_rig.overhead))
 	hud.restart_pressed.connect(_on_result_action)
@@ -385,6 +398,16 @@ func click_cell(cell: Vector2i) -> void:
 		State.TARGETING:
 			if _targetable.has(cell):
 				_perform(BattleActions.CastSpell.new(unit_id, selected_spell, cell))
+			elif not _blocked.has(cell):
+				_click_off_target()
+
+
+## A click out of the aimed spell's range (or beside the board) stops aiming, like Esc; one on a shaded cell, in range
+## but not aimable, keeps it (a near miss). Not while a tutorial step is up: a stray click would undo the step the
+## player is following.
+func _click_off_target() -> void:
+	if input_state == State.TARGETING and not _waiting_for_guide():
+		_enter_idle()
 
 
 ## A click during placement: select a hero, then a zone cell (a hero there swaps); the selected hero again
@@ -457,6 +480,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				if cell != BoardView.NO_CELL and cell == _press_cell:
 					click_cell(cell)
 					get_viewport().set_input_as_handled()
+				elif cell == BoardView.NO_CELL and _press_cell == BoardView.NO_CELL:
+					_click_off_target()  # A click beside the board.
 
 
 ## Per-frame work of a subclass (the solo tutorial keeps its spotlight on target); nothing here.
@@ -527,13 +552,13 @@ func focus_unit(unit_id: int) -> void:
 	camera_rig.focus_on(point)
 
 
-## The camera at a turn's start: an ally's turn always centers on it; an enemy's turn moves the
+## The camera at a turn's start: an ally's turn (the viewer's team) always centers on it; an enemy's turn moves the
 ## camera only when the enemy isn't comfortably on screen already (and then slowly), so a run
 ## of enemy turns in view doesn't make the view dart between them.
 func _focus_turn_start(unit_id: int) -> void:
 	if battle == null or unit_id < 0 or unit_id >= battle.state.units.size():
 		return
-	if battle.state.units[unit_id].team == UnitState.Team.PLAYER:
+	if battle.state.units[unit_id].team == units_view.viewer_team:
 		focus_unit(unit_id)
 		return
 	if battle.state.is_hidden_from(battle.state.units[unit_id], units_view.viewer_team):
@@ -630,14 +655,14 @@ func _on_event_played(event: BattleEvents.Event) -> void:
 		return
 	if event is BattleEvents.TurnStarted:
 		var unit := battle.state.units[(event as BattleEvents.TurnStarted).unit_id]
-		if unit.team == UnitState.Team.PLAYER:
+		if unit.team == units_view.viewer_team:
 			sound.emit(&"turn_start")
-		hud.show_banner(tr("%s's turn") % _turn_banner_name(unit))
+		hud.show_banner(_turn_banner_text(unit))
 
 
-## Who the turn banner names: the unit's own name (multiplayer names the player instead).
-func _turn_banner_name(unit: UnitState) -> String:
-	return tr(unit.data.display_name)
+## The banner at a turn's start: the unit's turn (multiplayer names the player, and says when it is the viewer's own).
+func _turn_banner_text(unit: UnitState) -> String:
+	return tr("%s's turn") % tr(unit.data.display_name)
 
 
 # --- State and highlights ---
@@ -661,6 +686,7 @@ func _set_state(new_state: State) -> void:
 	units_view.clear_previews()
 	_reach = null
 	_targetable.clear()
+	_blocked.clear()
 	var unit_id := battle.state.current_unit().id if battle != null and not battle.state.is_over() else -1
 	match new_state:
 		State.PLACING:
@@ -677,8 +703,11 @@ func _set_state(new_state: State) -> void:
 			for cell in cells:
 				_targetable[cell] = true
 			board_view.show_highlight(BoardView.Highlight.RANGE, cells)
-			board_view.show_highlight(BoardView.Highlight.RANGE_BLOCKED,
-					Targeting.blocked_cells(battle.state, unit_id, spell))
+			var blocked := Targeting.blocked_cells(battle.state, unit_id, spell)
+			for cell in blocked:
+				_blocked[cell] = true
+			board_view.show_highlight(BoardView.Highlight.RANGE_BLOCKED, blocked)
+	_update_spell_preview()
 	hud.set_prompt(_prompt_text())
 	hud.set_end_turn_pulse(new_state == State.IDLE and _nothing_left_to_do())
 	if new_state == State.IDLE and settings.auto_end_turn and _nothing_left_to_do():
@@ -691,12 +720,17 @@ func _set_state(new_state: State) -> void:
 func _end_turn_soon() -> void:
 	var generation := _battle_generation
 	var turn := battle.state.current_unit().id
-	if event_player.instant:
+	_auto_end_serial += 1
+	var serial := _auto_end_serial
+	if battle.state.cards:
+		await get_tree().create_timer(AUTO_END_CARDS_DELAY, true, false, true).timeout  # Real seconds, at any speed.
+	elif event_player.instant:
 		await get_tree().process_frame
 	else:
 		await create_tween().tween_interval(AUTO_END_DELAY).finished
 	# While a tutorial step is up the player follows it: the step's own card must be readable.
-	if generation == _battle_generation and input_state == State.IDLE and battle.state.current_unit().id == turn \
+	if generation == _battle_generation and serial == _auto_end_serial and input_state == State.IDLE \
+			and battle.state.current_unit().id == turn \
 			and not battle.state.is_over() and _nothing_left_to_do() and not _waiting_for_guide():
 		end_turn()
 
@@ -745,6 +779,48 @@ func _nothing_left_to_do() -> bool:
 		if BattleActions.CastSpell.can_afford(unit, slot):
 			return false
 	return true
+
+
+func _on_spell_hovered(spell: SpellData, on_bar: bool) -> void:
+	_hovered_spell = spell
+	_hovered_spell_on_bar = on_bar
+	_update_spell_preview()
+
+
+## The hovered spell's range on the board, from where its caster stands: orange where it sees, darker out of its
+## line of sight. In every state but aiming (the aimed spell's own cells are up) and the result: on another player's
+## turn too, to plan the next one. The move zone steps aside meanwhile, so the two don't mix.
+func _update_spell_preview() -> void:
+	if battle == null or input_state == State.TARGETING:
+		return
+	var caster := _spell_preview_caster()
+	var in_sight: Array[Vector2i] = []
+	var out_of_sight: Array[Vector2i] = []
+	if caster != null:
+		var cells := Targeting.range_preview(battle.state, caster.id, _hovered_spell)
+		for cell in cells:
+			if cells[cell]:
+				in_sight.append(cell)
+			else:
+				out_of_sight.append(cell)
+	board_view.show_highlight(BoardView.Highlight.RANGE, in_sight)
+	board_view.show_highlight(BoardView.Highlight.RANGE_BLOCKED, out_of_sight)
+	if input_state == State.IDLE and _reach != null:
+		board_view.show_highlight(BoardView.Highlight.REACH, [] as Array[Vector2i] if caster != null else _reach.cells())
+
+
+## Who casts the hovered spell: the spell bar's unit, or the inspected one for a row of its card; null when no spell
+## is hovered, or its caster is down or hidden from the viewer.
+func _spell_preview_caster() -> UnitState:
+	if _hovered_spell == null or input_state == State.ENDED:
+		return null
+	var unit_id := _spells_unit_id() if _hovered_spell_on_bar else _inspected_unit
+	if unit_id < 0 or unit_id >= battle.state.units.size():
+		return null
+	var unit := battle.state.units[unit_id]
+	if not unit.is_alive() or battle.state.is_hidden_from(unit, units_view.viewer_team):
+		return null
+	return unit
 
 
 ## Path to the hovered cell while moving, or the spell's area while aiming; in any state,
@@ -804,6 +880,7 @@ func _update_inspected() -> void:
 		if shown == null and _pinned_unit != -1 and _pinned_unit != active_id:
 			shown = _hud_model.infos[_pinned_unit]
 		pinned = shown != null and shown.unit_id == _pinned_unit
+	_inspected_unit = shown.unit_id if shown != null else -1
 	if shown == null:
 		hud.hide_inspected()
 	else:

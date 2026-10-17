@@ -13,11 +13,12 @@ const UI_SCALES: Array[float] = [0.75, 1.0, 1.25, 1.5]
 ## The actions the player can rebind, in display order. Right click and Esc (`cancel`)
 ## are fixed.
 const REBINDABLE: Array[StringName] = [&"spell_1", &"spell_2", &"spell_3", &"spell_4", &"spell_5",
-		&"end_turn", &"camera_rotate_left", &"camera_rotate_right", &"camera_toggle_view", &"camera_recenter", &"show_order"]
+		&"end_turn", &"camera_rotate_left", &"camera_rotate_right", &"camera_toggle_view", &"camera_recenter", &"show_order", &"mark"]
 const ACTION_LABELS: Dictionary[StringName, String] = {
 	&"spell_1": "Spell 1", &"spell_2": "Spell 2", &"spell_3": "Spell 3", &"spell_4": "Spell 4", &"spell_5": "Spell 5",
 	&"end_turn": "End turn", &"camera_rotate_left": "Turn camera left", &"camera_rotate_right": "Turn camera right",
 	&"camera_toggle_view": "Toggle top view", &"camera_recenter": "Recenter camera", &"show_order": "Turn order",
+	&"mark": "Point out (multiplayer)",
 }
 
 ## Keys no action may take: they drive the menus (and the hint card's Enter).
@@ -34,8 +35,10 @@ var music_volume := 0.5
 var effects_volume := 0.8
 var muted := false
 var battle_speed := BattleSpeed.NORMAL
+## The speed of multiplayer fights (each player's own: the playback is local), changed with the fight's speed button.
+var net_battle_speed := BattleSpeed.FAST
 ## Ends the turn by itself once the acting hero can neither move nor afford a spell.
-var auto_end_turn := false
+var auto_end_turn := true
 ## Developer tools: the title's QA screen, Auto in battle, cheats in QA battles.
 var qa_tools := false
 var window_mode := WindowMode.WINDOWED

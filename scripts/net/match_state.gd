@@ -43,7 +43,7 @@ class Seat extends RefCounted:
 
 var phase := Phase.LOBBY
 var seats: Dictionary[int, Seat] = {}
-var settings: Dictionary = {"typology": "open_field", "size": 14, "seed": 1, "turn": 45, "grace": 20, "cards": false, "friendly_fire": true}
+var settings: Dictionary = {"typology": "open_field", "size": 14, "seed": 1, "turn": 30, "grace": 20, "cards": false, "friendly_fire": true, "spirits": true}
 ## Every entry applied so far; entry n is log[n - 1].
 var log: Array[Dictionary] = []
 var battle: Battle
@@ -270,7 +270,7 @@ func _cfg(entry: Dictionary) -> String:
 		"grace":
 			if value is not int or value < 0 or value > 120:
 				return "bad grace time"
-		"cards", "friendly_fire":
+		"cards", "friendly_fire", "spirits":
 			if value is not bool:
 				return "bad flag"
 		_:
@@ -326,6 +326,8 @@ func make_battle() -> Battle:
 	if state == null:
 		return null
 	state.friendly_fire = bool(settings.get("friendly_fire", true))
+	if settings.get("spirits", true):
+		state.spirit_kit = PvpHeroes.spirit_kit()
 	if settings.get("cards", false):
 		state.enable_cards(int(settings["seed"]))
 	var fresh := Battle.new(state)

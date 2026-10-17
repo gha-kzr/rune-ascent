@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://1wlukxkklgx5"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_65lss"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_du4bb"]
+[ext_resource type="Script" uid="uid://cq12oalhu55my" path="res://scripts/data/move_effect.gd" id="3_rkrsk"]
+[ext_resource type="Texture2D" uid="uid://3yfp481000is" path="res://ui/icons/pounce.svg" id="4_giy2n"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_o5gig"]
+
+[sub_resource type="Resource" id="Resource_5d5dt"]
+script = ExtResource("1_65lss")
+
+[sub_resource type="Resource" id="Resource_s1maw"]
+script = ExtResource("3_rkrsk")
+kind = 1
+distance = 1
+target_filter = 3
+
+[resource]
+script = ExtResource("5_o5gig")
+display_name = "Rocket Jump"
+icon = ExtResource("4_giy2n")
+ap_cost = 1
+min_range = 2
+max_range = 4
+needs_line_of_sight = false
+area = SubResource("Resource_5d5dt")
+effects = Array[ExtResource("2_du4bb")]([SubResource("Resource_s1maw")])

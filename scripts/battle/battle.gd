@@ -5,10 +5,12 @@ extends RefCounted
 ## handles deaths, victory and turn changes. Returns every event in order.
 ## Wrap a clone (Battle.new(state.clone())) to simulate without touching the real battle.
 ##
-## Turn end: the unit's statuses count down (expired ones are removed), then TurnEnded.
+## Turn end: the unit's statuses count down (expired ones are removed), card combat refills the hand, then TurnEnded.
 ## Turn start: TurnStarted, sudden-death damage (party only, late rounds), the unit's
 ## statuses tick, deaths are checked; a unit killed by
 ## its own ticks is skipped and the next one starts; otherwise it refills AP and MP.
+## Spirits (BattleState.spirit_kit): a unit that falls stays in the turn order; its turn has no ticks and no sudden
+## death, and ends with its one action (an action by a unit that isn't alive always ends its turn).
 
 var state: BattleState
 ## Stalemate safety net: from this round (0: never), each party unit (every unit in PvP) loses
@@ -75,6 +77,8 @@ func _end_turn(unit: UnitState) -> Array[BattleEvents.Event]:
 			unit.statuses.erase(status)
 			events.append(BattleEvents.StatusExpired.new(unit.id, status.data))
 	unit.commit_position()
+	if unit.card_mode:
+		unit.draw_hand()  # At the end of the turn, not the start: the new hand can be read while the others play.
 	events.append(BattleEvents.TurnEnded.new(unit.id))
 	return events
 
@@ -91,6 +95,9 @@ func _start_turns(advance_first: bool) -> Array[BattleEvents.Event]:
 		advance = true
 		var unit := state.current_unit()
 		events.append(BattleEvents.TurnStarted.new(unit.id, state.turn_order.round_number, unit.max_ap(), unit.max_mp()))
+		if unit.spirit:
+			unit.start_turn()
+			break
 		var alive_before := _alive_ids()
 		events.append_array(_sudden_death(unit))
 		events.append_array(_tick_statuses(unit))
@@ -169,7 +176,10 @@ func _report_deaths(alive_before: Array[int]) -> Array[BattleEvents.Event]:
 	for id in alive_before:
 		if not state.units[id].is_alive():
 			events.append(BattleEvents.UnitDied.new(id))
-			state.turn_order.remove(id)
+			if state.spirit_kit.is_empty():
+				state.turn_order.remove(id)
+			else:
+				state.units[id].become_spirit(state.spirit_kit)
 	if not events.is_empty() and state.is_over():
 		events.append(BattleEvents.BattleEnded.new(state.outcome()))
 	return events

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bq128x6ue6l64"]
+
+[ext_resource type="Script" uid="uid://u0i2gx4oawgk" path="res://scripts/tools/net_sandbox.gd" id="1_sandbox"]
+
+[node name="NetSandbox" type="Node"]
+script = ExtResource("1_sandbox")

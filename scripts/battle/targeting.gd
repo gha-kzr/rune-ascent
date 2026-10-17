@@ -61,6 +61,18 @@ static func blocked_cells(state: BattleState, caster_id: int, spell: SpellData) 
 	return result
 
 
+## The spell's range from where the caster stands, geometry only (what a cell's unit is doesn't count, nor the
+## effects' own conditions): cell → whether the caster sees it (always true when the spell doesn't need line of
+## sight). Shown while a spell is hovered, before it is aimed.
+static func range_preview(state: BattleState, caster_id: int, spell: SpellData) -> Dictionary[Vector2i, bool]:
+	var result: Dictionary[Vector2i, bool] = {}
+	var from := state.units[caster_id].cell
+	for cell in _cells_in_reach(state, caster_id, spell):
+		if _in_range(state, from, spell, cell):
+			result[cell] = not spell.needs_line_of_sight or has_line_of_sight(state, from, cell)
+	return result
+
+
 static func targetable_cells(state: BattleState, caster_id: int, spell: SpellData) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for cell in _cells_in_reach(state, caster_id, spell):
@@ -165,7 +177,9 @@ static func _blocks(state: BattleState, cell: Vector2i, sight_height: float) -> 
 			return state.grid.height_at(cell) + state.grid.obstacle_levels(cell) > sight_height
 		Grid.CellType.HOLE:
 			return false
-	return state.is_occupied(cell) or state.grid.height_at(cell) > sight_height
+	var unit := state.unit_at(cell)
+	# A hidden unit blocks nobody's sight: its shadow would give away where it stands.
+	return (unit != null and not unit.is_stealthed()) or state.grid.height_at(cell) > sight_height
 
 
 ## The axis direction closest to `offset` (x wins a tie); zero for a zero offset.

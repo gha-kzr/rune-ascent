@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_cjo8u")
 unit = ExtResource("3_rn5vt")
-role_label = "Curses and poison"
-description = "Wears enemies down with poison and rot, roots them, slows them and steals their action points. Little burst, no healing."
+role_label = "Areas and control"
+description = "Hits groups, drags enemies out of their lines and pins them in place with the dead's hands."
 gender = 2
 ai_positioning = ExtResource("1_yh757")

@@ -16,8 +16,8 @@ size = 1
 
 [sub_resource type="Resource" id="Resource_aty8c"]
 script = ExtResource("5_1ecv1")
-min_amount = 7
-max_amount = 9
+min_amount = 11
+max_amount = 14
 damage_type = ExtResource("4_j1ok6")
 target_filter = 2
 
@@ -31,7 +31,7 @@ display_name = "Whirling Staff"
 icon = ExtResource("7_rw381")
 cast_effect = ExtResource("2_pg5rk")
 impact_delay = 0.3
-cooldown = 1
+ap_cost = 1
 min_range = 0
 max_range = 0
 needs_line_of_sight = false

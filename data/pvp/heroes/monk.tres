@@ -7,5 +7,5 @@
 script = ExtResource("1_qvg6e")
 unit = ExtResource("2_bul3h")
 role_label = "Skirmisher"
-description = "Quick on its feet: kicks in, pulls enemies close, sweeps them away and recovers on the spot."
+description = "Quick on its feet: kicks in, pulls enemies close and sweeps them away."
 gender = 2

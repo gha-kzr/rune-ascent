@@ -13,6 +13,10 @@ extends RefCounted
 ## rethinking, and the turn always ends), but it can move again after a cast.
 ## A unit with a Positioning (its role's tactics) also scores where a plan ends, and with
 ## nothing worth casting moves to its best cell instead of straight at the opponents.
+## A cast that moves someone also scores what the move is for (_movement_value): the better hit it opens for the
+## action points left (a teleport or a jump to strike, a pull into reach), a place closer to the opponents than
+## walking gets (or, with a Positioning, a better one), and a hurt ally taken away from them. So a pure move (Blink,
+## Shadow Step, Rescue) is worth casting, and the hit it opens comes at the next call.
 
 ## Distance of cells from which no opponent can be reached.
 const FAR_AWAY := 1 << 30
@@ -24,6 +28,17 @@ class Plan:
 	var spell_index: int
 	var target: Vector2i
 	var score: float
+
+
+## What one decision's plans share: how far the opponents are, and the best a walk alone does (what a move spell must
+## beat to be worth an action).
+class Context:
+	## Walking cost from each cell to the nearest visible opponent.
+	var approach: Dictionary[Vector2i, int] = {}
+	## The least of it a walk reaches (where the unit stands, or a cell in reach).
+	var best_walk := FAR_AWAY
+	## With a Positioning: the best score a walk gets.
+	var best_walk_position := -INF
 
 
 ## `profile` defaults to AIProfile's default weights.
@@ -39,11 +54,13 @@ static func choose_next(state: BattleState, unit_id: int, profile: AIProfile = n
 	var distances: Dictionary[Vector2i, int] = {}
 	if unit.positioning != null:
 		distances = _opponent_reach(state, unit_id)
-	var plan := _best_cast(state, unit_id, reach, profile, distances)
+	var plan := _best_cast(state, unit_id, reach, profile, distances, _context(state, unit_id, reach, distances))
 	if plan != null:
 		if plan.cell != unit.cell:
 			return BattleActions.Move.new(unit_id, plan.cell)
 		return BattleActions.CastSpell.new(unit_id, plan.spell_index, plan.target)
+	if unit.spirit:
+		return BattleActions.EndTurn.new(unit_id)  # A spirit doesn't walk: nothing worth casting, it passes.
 
 	var destination := _best_position(state, unit_id, reach, distances) if unit.positioning != null \
 			else _approach(state, unit_id, reach)
@@ -55,10 +72,12 @@ static func choose_next(state: BattleState, unit_id: int, profile: AIProfile = n
 ## Best cast with a positive score from any cell in reach, or null. Ties go to the plan
 ## needing the least MP, then to the first one found.
 static func _best_cast(state: BattleState, unit_id: int, reach: Movement.Reach, profile: AIProfile,
-		distances: Dictionary[Vector2i, int] = {}) -> Plan:
+		distances: Dictionary[Vector2i, int] = {}, context: Context = null) -> Plan:
+	if context == null:
+		context = _context(state, unit_id, reach, distances)
 	var unit := state.units[unit_id]
 	var positions: Array[Vector2i] = [unit.cell]
-	if not unit.moved:
+	if not unit.moved and not unit.spirit:
 		positions.append_array(reach.cells())
 	# Damage and heals use the average roll, so the AI decides on what usually happens.
 	# Any other randomness gets dice seeded apart from the real RNG, so the AI never
@@ -77,22 +96,27 @@ static func _best_cast(state: BattleState, unit_id: int, reach: Movement.Reach, 
 			# A free spell could be cast forever; skipping it guarantees the turn ends.
 			if unit.cast_cost(spell) <= 0 or not BattleActions.CastSpell.can_afford(unit, spell_index):
 				continue
+			var moves_caster := _moves_caster(spell)
+			if moves_caster and cell != unit.cell and not _deals_damage(spell):
+				continue  # A pure move is planned from where the unit stands: walking first would only waste MP.
 			for target in Targeting.targetable_cells(moved, unit_id, spell):
-				if not _area_hits_a_unit(moved, spell, cell, target, unit.team):
-					continue
+				if not moves_caster and not _area_hits_a_unit(moved, spell, cell, target, unit.team):
+					continue  # (A move's target is where it goes: often a free cell.)
 				var simulated := moved.clone()
 				simulated.rng.seed = dice_seed
 				var result := Battle.new(simulated).perform(BattleActions.CastSpell.new(unit_id, spell_index, target))
 				if not result.ok():
 					push_error("EnemyAI: simulated cast rejected: %s" % result.error)
 					continue
-				var score := _score(state, simulated, unit.team, profile)
+				var after := distances
+				if unit.positioning != null and not _same_opponents(moved, simulated, unit.team):
+					after = _opponent_reach(simulated, unit_id)
+				var score := _score(state, simulated, unit.team, profile) + _movement_value(moved, simulated, unit_id, profile, context, after)
 				if score <= 0.0:
 					continue  # Not worth casting, wherever it is cast from.
 				if unit.positioning != null:
 					# Where the cast leaves the caster (after its own moves, e.g. a charge), against
 					# where it leaves the opponents (pushed, pulled or killed).
-					var after := distances if _same_opponents(moved, simulated, unit.team) else _opponent_reach(simulated, unit_id)
 					score += unit.positioning.score(simulated, unit_id, simulated.units[unit_id].cell, after)
 				var cost := reach.cost_to(cell)
 				if (best == null or score > best.score
@@ -104,6 +128,90 @@ static func _best_cast(state: BattleState, unit_id: int, reach: Movement.Reach, 
 					best.target = target
 					best.score = score
 	return best
+
+
+static func _context(state: BattleState, unit_id: int, reach: Movement.Reach, distances: Dictionary[Vector2i, int]) -> Context:
+	var unit := state.units[unit_id]
+	var context := Context.new()
+	context.approach = Movement.distances_to(state.grid, _opponent_cells(state, unit.team))
+	var cells: Array[Vector2i] = [unit.cell]
+	if not unit.moved:
+		cells.append_array(reach.cells())
+	for cell in cells:
+		context.best_walk = mini(context.best_walk, context.approach.get(cell, FAR_AWAY))
+		if unit.positioning != null:
+			context.best_walk_position = maxf(context.best_walk_position, unit.positioning.score(state, unit_id, cell, distances))
+	return context
+
+
+## What a cast that moves someone is for (0 when nobody moved): the better hit it opens for the action points left,
+## the caster's place against what walking gets, and hurt allies taken away from the opponents.
+static func _movement_value(before: BattleState, after: BattleState, unit_id: int, profile: AIProfile, context: Context,
+		after_distances: Dictionary[Vector2i, int]) -> float:
+	var caster := after.units[unit_id]
+	if not caster.is_alive() or not _anyone_moved(before, after):
+		return 0.0
+	var value := 0.0
+	if caster.ap > 0:
+		value += profile.follow_up_share * maxf(0.0, _strike_value(after, unit_id, profile) - _strike_value(before, unit_id, profile))
+	if caster.cell != before.units[unit_id].cell:
+		if caster.positioning != null:
+			value += maxf(0.0, caster.positioning.score(after, unit_id, caster.cell, after_distances) - context.best_walk_position)
+		else:
+			var left: int = context.approach.get(caster.cell, FAR_AWAY)
+			if context.best_walk < FAR_AWAY and left < context.best_walk:
+				value += (context.best_walk - left) * profile.approach_value
+	for ally in after.units:
+		var was := before.units[ally.id]
+		if ally.id == unit_id or ally.team != caster.team or not ally.is_alive() or ally.cell == was.cell:
+			continue
+		var from: int = context.approach.get(was.cell, FAR_AWAY)
+		var to: int = context.approach.get(ally.cell, FAR_AWAY)
+		if from < FAR_AWAY and to < FAR_AWAY:
+			value += (to - from) * (1.0 - float(ally.hp) / ally.max_hp()) * profile.rescue_value
+	return value
+
+
+## The best single hit the unit could make from where it stands with what it can still cast (average damage, a kill's
+## bonus): what a move is measured by. No simulation: an estimate, made for many candidate moves.
+static func _strike_value(state: BattleState, unit_id: int, profile: AIProfile) -> float:
+	var unit := state.units[unit_id]
+	var best := 0.0
+	for spell_index in unit.data.spells.size():
+		if not BattleActions.CastSpell.can_afford(unit, spell_index):
+			continue
+		var spell := unit.data.spells[spell_index]
+		for target in state.units:
+			if not target.is_alive() or target.team == unit.team or state.is_hidden_from(target, unit.team):
+				continue
+			if not Targeting.can_target(state, unit_id, spell, target.cell):
+				continue
+			var damage := 0.0
+			for effect in spell.effects:
+				if effect is DamageEffect and effect.target_filter in [EffectData.TargetFilter.ALL, EffectData.TargetFilter.ENEMIES]:
+					damage += (effect as DamageEffect).scaled(state, unit_id, target.id, (effect as DamageEffect).average_roll())
+			if damage > 0.0:
+				best = maxf(best, minf(damage, target.hp) + (profile.kill_bonus if damage >= target.hp else 0.0))
+	return best
+
+
+static func _anyone_moved(before: BattleState, after: BattleState) -> bool:
+	for unit in before.units:
+		if unit.is_alive() and after.units[unit.id].is_alive() and after.units[unit.id].cell != unit.cell:
+			return true
+	return false
+
+
+## Whether the spell moves its caster (a teleport, a jump, a charge, a leap back).
+static func _moves_caster(spell: SpellData) -> bool:
+	for effect in spell.effects:
+		if effect is MoveEffect and effect.target_filter == EffectData.TargetFilter.CASTER:
+			return true
+	return false
+
+
+static func _deals_damage(spell: SpellData) -> bool:
+	return spell.effects.any(func(effect: EffectData) -> bool: return effect is DamageEffect)
 
 
 ## Whether the area covers a unit the caster's team can see (it doesn't aim at a hidden one: it can't know).
@@ -187,7 +295,8 @@ static func _statuses_benefit(state: BattleState, unit: UnitState, profile: AIPr
 				StatModifier.Stat.AP:
 					total += modifier.amount * turns * profile.ap_value
 				StatModifier.Stat.MP:
-					total += modifier.amount * turns * profile.mp_value
+					# A unit can't lose more MP than it has (a root's -9 costs a 4-MP unit 4).
+					total += maxi(modifier.amount, -unit.data.mp) * turns * profile.mp_value
 				StatModifier.Stat.DAMAGE_TAKEN_PERCENT:
 					total -= modifier.amount / 100.0 * turns * profile.incoming_damage_per_turn
 				StatModifier.Stat.POWER:

@@ -6,5 +6,5 @@
 [resource]
 script = ExtResource("1_sw5c7")
 unit = ExtResource("2_ujduh")
-role_label = "Spirit"
-description = "Shrugs off most physical attacks, but holy light burns it. Drains life, chills and terrifies."
+role_label = "Haunter"
+description = "Drifts through walls, drags its victims close with an icy grasp and wails at everyone around."

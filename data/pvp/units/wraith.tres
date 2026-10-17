@@ -1,38 +1,22 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://djng77fkoha2d"]
 
-[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_2k02f"]
-[ext_resource type="Resource" uid="uid://bdrr6ge5g7xv6" path="res://data/damage_types/physical.tres" id="2_sray3"]
-[ext_resource type="Resource" uid="uid://b4jrpxctg8xvs" path="res://data/damage_types/holy.tres" id="3_w8vk4"]
-[ext_resource type="PackedScene" uid="uid://buvtshieg6jm7" path="res://assets/models/ghost.tscn" id="4_pn7bs"]
-[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="5_x3sjf"]
-[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="6_gi0mx"]
-[ext_resource type="Resource" uid="uid://bogttvkym365c" path="res://data/pvp/spells/wraith_touch.tres" id="7_dwnb4"]
-[ext_resource type="Resource" uid="uid://bxl001yobg5lq" path="res://data/pvp/spells/wraith_wail.tres" id="8_wyrha"]
-[ext_resource type="Resource" uid="uid://rbq0h7k0vn3l" path="res://data/pvp/spells/wraith_phase.tres" id="9_2i4rj"]
-[ext_resource type="Resource" uid="uid://bkqn8dahd1gup" path="res://data/pvp/spells/wraith_siphon.tres" id="10_x5tiv"]
-[ext_resource type="Resource" uid="uid://2x7uxwuai7nw" path="res://data/pvp/spells/wraith_chill.tres" id="11_cv6bo"]
-
-[sub_resource type="Resource" id="Resource_823k7"]
-script = ExtResource("1_2k02f")
-stat = 4
-amount = 70
-damage_type = ExtResource("2_sray3")
-
-[sub_resource type="Resource" id="Resource_pjx61"]
-script = ExtResource("1_2k02f")
-stat = 4
-amount = -50
-damage_type = ExtResource("3_w8vk4")
+[ext_resource type="Script" uid="uid://dii783ukv1xnv" path="res://scripts/data/stat_modifier.gd" id="1_t2yra"]
+[ext_resource type="PackedScene" uid="uid://buvtshieg6jm7" path="res://assets/models/ghost.tscn" id="2_q8713"]
+[ext_resource type="Script" uid="uid://q7sih56ik1gi" path="res://scripts/data/unit_data.gd" id="3_kyh6t"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="4_2k02f"]
+[ext_resource type="Resource" uid="uid://bogttvkym365c" path="res://data/pvp/spells/wraith_touch.tres" id="5_sray3"]
+[ext_resource type="Resource" uid="uid://bxl001yobg5lq" path="res://data/pvp/spells/wraith_wail.tres" id="6_w8vk4"]
+[ext_resource type="Resource" uid="uid://rbq0h7k0vn3l" path="res://data/pvp/spells/wraith_phase.tres" id="7_pn7bs"]
+[ext_resource type="Resource" uid="uid://cy7iansygi0pg" path="res://data/pvp/spells/wraith_grasp.tres" id="8_x3sjf"]
 
 [resource]
-script = ExtResource("5_x3sjf")
+script = ExtResource("3_kyh6t")
 display_name = "Wraith"
-max_hp = 115
-ap = 7
+max_hp = 130
+ap = 2
 mp = 5
 initiative = 112
-spells = Array[ExtResource("6_gi0mx")]([ExtResource("7_dwnb4"), ExtResource("8_wyrha"), ExtResource("9_2i4rj"), ExtResource("10_x5tiv"), ExtResource("11_cv6bo")])
-innate_modifiers = Array[ExtResource("1_2k02f")]([SubResource("Resource_823k7"), SubResource("Resource_pjx61")])
+spells = Array[ExtResource("4_2k02f")]([ExtResource("5_sray3"), ExtResource("6_w8vk4"), ExtResource("7_pn7bs"), ExtResource("8_x3sjf")])
 color = Color(0.55, 0.4, 0.8, 1)
-model_scene = ExtResource("4_pn7bs")
+model_scene = ExtResource("2_q8713")
 model_height = 1.35

@@ -30,10 +30,12 @@ func load_or_default() -> Settings:
 		var volume: Variant = config.get_value("audio", field, settings.get(field))
 		if _is_number(volume) and is_finite(float(volume)):
 			settings.set(field, clampf(float(volume), 0.0, 1.0))
-	var speed: Variant = config.get_value("gameplay", "battle_speed", Settings.BattleSpeed.NORMAL)
-	if _is_number(speed) and int(speed) in Settings.BattleSpeed.values():
-		settings.battle_speed = int(speed) as Settings.BattleSpeed
-	var auto_end: Variant = config.get_value("gameplay", "auto_end_turn", false)
+	for field: String in ["battle_speed", "net_battle_speed"]:
+		var speed: Variant = config.get_value("gameplay", field, settings.get(field))
+		if _is_number(speed) and int(speed) in Settings.BattleSpeed.values():
+			settings.set(field, int(speed))
+	# "auto_end" (was "auto_end_turn" while it was off by default): everyone starts with it on again.
+	var auto_end: Variant = config.get_value("gameplay", "auto_end", settings.auto_end_turn)
 	if auto_end is bool:
 		settings.auto_end_turn = auto_end
 	var qa: Variant = config.get_value("gameplay", "qa_tools", false)
@@ -70,7 +72,8 @@ static func _is_number(value: Variant) -> bool:
 func save(settings: Settings) -> bool:
 	var config := ConfigFile.new()
 	config.set_value("gameplay", "battle_speed", settings.battle_speed)
-	config.set_value("gameplay", "auto_end_turn", settings.auto_end_turn)
+	config.set_value("gameplay", "net_battle_speed", settings.net_battle_speed)
+	config.set_value("gameplay", "auto_end", settings.auto_end_turn)
 	config.set_value("gameplay", "qa_tools", settings.qa_tools)
 	config.set_value("audio", "master_volume", settings.master_volume)
 	config.set_value("audio", "music_volume", settings.music_volume)

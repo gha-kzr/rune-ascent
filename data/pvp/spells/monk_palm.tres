@@ -12,14 +12,14 @@ script = ExtResource("1_wn2kx")
 
 [sub_resource type="Resource" id="Resource_6dh53"]
 script = ExtResource("4_h7j6l")
-min_amount = 10
-max_amount = 14
+min_amount = 15
+max_amount = 19
 damage_type = ExtResource("3_eg0id")
 
 [resource]
 script = ExtResource("6_4jb37")
 display_name = "Palm Strike"
 icon = ExtResource("5_7upm4")
-ap_cost = 2
+ap_cost = 1
 area = SubResource("Resource_00ogi")
 effects = Array[ExtResource("2_jag7q")]([SubResource("Resource_6dh53")])

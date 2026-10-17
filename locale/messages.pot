@@ -19,6 +19,10 @@ msgstr ""
 msgid "%d MP"
 msgstr ""
 
+#: scripts/view/hud/spell_bar.gd
+msgid "%d of the %d cards in the deck"
+msgstr ""
+
 #: scripts/data/apply_status_effect.gd scripts/view/hud/status_info.gd
 msgid "%d turn"
 msgid_plural "%d turns"
@@ -91,10 +95,6 @@ msgstr ""
 
 #: scripts/view/hud/spell_bar.gd
 msgid "%s area %d"
-msgstr ""
-
-#: scripts/view/hud/spell_bar.gd
-msgid "%s card: %d of %d in the deck"
 msgstr ""
 
 #: scripts/game/game.gd
@@ -213,7 +213,19 @@ msgstr ""
 msgid "%s%% damage taken"
 msgstr ""
 
-#: scripts/view/battle_controller.gd
+#: scripts/net/net_battle_controller.gd
+msgid "%s's spirit"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "%s's spirit: %s"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "%s's spirit: %s on %s"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd scripts/view/battle_controller.gd
 msgid "%s's turn"
 msgstr ""
 
@@ -231,6 +243,14 @@ msgstr ""
 
 #: scripts/game/hub/rune_stash.gd
 msgid "%s: %s.\n%s rune. Click to equip on the selected hero."
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "%s: Here!"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "%s: point out to your team what is under the mouse"
 msgstr ""
 
 #: scripts/net/net_battle_controller.gd
@@ -275,6 +295,10 @@ msgstr ""
 
 #: scripts/progression/hints.gd
 msgid "A boss floor! The boss is much stronger. Winning offers a boon (a bonus for the whole run) or a full heal."
+msgstr ""
+
+#: scripts/game/net/net_lobby_screen.gd
+msgid "A fallen hero keeps its turns as a spirit: once a turn, it curses or roots an enemy, or reveals hidden ones. Off: the fallen only watch."
 msgstr ""
 
 #: scripts/progression/hints.gd
@@ -341,6 +365,10 @@ msgstr ""
 msgid "AP: action points. Each spell costs some; they refill every turn."
 msgstr ""
 
+#: data/pvp/heroes/necromancer.tres
+msgid "Areas and control"
+msgstr ""
+
 #: data/pvp/spells/ranger_arrow.tres data/spells/arrow.tres
 msgid "Arrow"
 msgstr ""
@@ -403,18 +431,6 @@ msgstr ""
 
 #: data/spells/bite.tres
 msgid "Bite"
-msgstr ""
-
-#: data/pvp/statuses/bleeding.tres
-msgid "Bleeding"
-msgstr ""
-
-#: data/pvp/statuses/blessed.tres
-msgid "Blessed"
-msgstr ""
-
-#: data/pvp/spells/priest_bless.tres
-msgid "Blessing"
 msgstr ""
 
 #: data/pvp/spells/sorc_blink.tres data/spells/blink.tres
@@ -481,10 +497,6 @@ msgstr ""
 msgid "Brute"
 msgstr ""
 
-#: data/pvp/statuses/bulwark.tres
-msgid "Bulwark"
-msgstr ""
-
 #: scripts/game/net/net_join_screen.gd scripts/game/spells_screen.gd
 msgid "Cancel"
 msgstr ""
@@ -516,7 +528,7 @@ msgid "Charges in a straight line next to the target"
 msgstr ""
 
 #: data/pvp/heroes/knight.tres
-msgid "Charges in, bashes enemies out of position and shrugs off blows with Guard. Slow to reach, hard to remove."
+msgid "Charges in every turn, bashes enemies out of position and sweeps around him. Hard to remove."
 msgstr ""
 
 #: data/spells/chill_touch.tres
@@ -559,6 +571,10 @@ msgstr ""
 msgid "Clear tower floor %d first."
 msgstr ""
 
+#: scripts/net/net_battle_controller.gd
+msgid "Click a cell or a unit to point it out to your team (Esc to cancel)"
+msgstr ""
+
 #: scripts/view/battle_controller.gd
 msgid "Click a teal cell to place %s (Esc to deselect)"
 msgstr ""
@@ -595,7 +611,7 @@ msgstr ""
 msgid "Club"
 msgstr ""
 
-#: scripts/battle/card_rules.gd scripts/data/rune_data.gd
+#: scripts/data/rune_data.gd
 msgid "Common"
 msgstr ""
 
@@ -651,8 +667,12 @@ msgstr ""
 msgid "Cross"
 msgstr ""
 
-#: data/pvp/heroes/necromancer.tres
-msgid "Curses and poison"
+#: data/pvp/spells/spirit_curse.tres
+msgid "Curse"
+msgstr ""
+
+#: data/pvp/statuses/cursed.tres
+msgid "Cursed"
 msgstr ""
 
 #: data/pvp/spells/rogue_dagger.tres
@@ -679,20 +699,16 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: data/pvp/spells/necro_drain.tres
-msgid "Drain Will"
-msgstr ""
-
-#: data/pvp/statuses/drained.tres
-msgid "Drained"
-msgstr ""
-
 #: scripts/view/hud/spell_bar.gd
 msgid "Draw pile %d · Discard pile %d"
 msgstr ""
 
-#: data/pvp/statuses/dread.tres data/statuses/dread.tres
+#: data/statuses/dread.tres
 msgid "Dread"
+msgstr ""
+
+#: data/pvp/heroes/wraith.tres
+msgid "Drifts through walls, drags its victims close with an icy grasp and wails at everyone around."
 msgstr ""
 
 #: data/pvp/spells/goblin_dynamite.tres
@@ -780,7 +796,7 @@ msgid "Fast (x2)"
 msgstr ""
 
 #: data/pvp/heroes/goblin.tres
-msgid "Fast, sneaky and reckless: bombs and dynamite hurt everyone around, friends included. Steals action points."
+msgid "Fast and reckless: throws bombs and dynamite, and rockets himself across the board."
 msgstr ""
 
 #: data/spells/feast.tres
@@ -915,8 +931,8 @@ msgstr ""
 msgid "Frost Lance"
 msgstr ""
 
-#: data/pvp/spells/sorc_frost_spike.tres
-msgid "Frost Spike"
+#: data/pvp/spells/wraith_grasp.tres
+msgid "Frozen Grasp"
 msgstr ""
 
 #: scripts/game/run_screen.gd
@@ -1007,15 +1023,11 @@ msgstr ""
 msgid "Grasping Dead"
 msgstr ""
 
-#: data/pvp/spells/wraith_chill.tres
-msgid "Grave Chill"
-msgstr ""
-
 #: data/spells/ground_slam.tres
 msgid "Ground Slam"
 msgstr ""
 
-#: data/pvp/spells/knight_guard.tres data/spells/guard.tres
+#: data/spells/guard.tres
 msgid "Guard"
 msgstr ""
 
@@ -1023,12 +1035,12 @@ msgstr ""
 msgid "Guarded"
 msgstr ""
 
-#: data/pvp/spells/rogue_hamstring.tres data/spells/hamstring.tres
+#: data/spells/hamstring.tres
 msgid "Hamstring"
 msgstr ""
 
-#: data/pvp/statuses/hasty.tres
-msgid "Hasty"
+#: data/pvp/heroes/wraith.tres
+msgid "Haunter"
 msgstr ""
 
 #: scripts/view/hud.gd
@@ -1036,7 +1048,7 @@ msgid "Heal the heroes"
 msgstr ""
 
 #: data/pvp/heroes/priestess.tres
-msgid "Healer and support"
+msgid "Healer"
 msgstr ""
 
 #: data/pvp/spells/priest_heal.tres
@@ -1049,10 +1061,6 @@ msgstr ""
 
 #: scripts/data/heal_effect.gd
 msgid "heals %s (%d%% Power)"
-msgstr ""
-
-#: data/pvp/heroes/priestess.tres
-msgid "Heals, cleanses and blesses her team for extra action points. Her own damage is very low, and she cannot heal herself with Healing Touch."
 msgstr ""
 
 #: scripts/net/emotes.gd
@@ -1073,6 +1081,10 @@ msgstr ""
 
 #: scripts/game/settings_screen.gd
 msgid "Hints will show again."
+msgstr ""
+
+#: data/pvp/heroes/necromancer.tres
+msgid "Hits groups, drags enemies out of their lines and pins them in place with the dead's hands."
 msgstr ""
 
 #: data/damage_types/holy.tres
@@ -1099,11 +1111,7 @@ msgstr ""
 msgid "HP: health. At 0 the unit falls."
 msgstr ""
 
-#: data/pvp/statuses/hunted.tres
-msgid "Hunted"
-msgstr ""
-
-#: data/pvp/spells/ranger_mark.tres data/spells/hunters_mark.tres
+#: data/spells/hunters_mark.tres
 msgid "Hunter's Mark"
 msgstr ""
 
@@ -1121,10 +1129,6 @@ msgstr ""
 
 #: scripts/data/glossary.gd
 msgid "Initiative: the higher it is, the earlier the unit plays."
-msgstr ""
-
-#: data/pvp/spells/monk_peace.tres
-msgid "Inner Peace"
 msgstr ""
 
 #: scripts/game/settings_screen.gd
@@ -1229,14 +1233,6 @@ msgstr ""
 msgid "Level up! (+%d XP)"
 msgstr ""
 
-#: data/pvp/spells/wraith_siphon.tres
-msgid "Life Siphon"
-msgstr ""
-
-#: data/pvp/statuses/nimble.tres
-msgid "Light fingers"
-msgstr ""
-
 #: scripts/data/area_shape.gd
 msgid "Line"
 msgstr ""
@@ -1285,10 +1281,6 @@ msgstr ""
 msgid "Mend"
 msgstr ""
 
-#: data/pvp/spells/priest_rain.tres
-msgid "Mending Rain"
-msgstr ""
-
 #: scripts/game/top_bar.gd
 msgid "Menu"
 msgstr ""
@@ -1297,7 +1289,7 @@ msgstr ""
 msgid "Meteor"
 msgstr ""
 
-#: data/pvp/spells/necro_miasma.tres data/pvp/statuses/miasma.tres
+#: data/pvp/spells/necro_miasma.tres
 msgid "Miasma"
 msgstr ""
 
@@ -1525,10 +1517,6 @@ msgstr ""
 msgid "Pick at least one enemy."
 msgstr ""
 
-#: data/pvp/spells/goblin_pickpocket.tres
-msgid "Pickpocket"
-msgstr ""
-
 #: data/spells/piercing_thrust.tres
 msgid "Piercing Thrust"
 msgstr ""
@@ -1545,10 +1533,6 @@ msgstr ""
 msgid "Place your heroes: click one, then a teal cell. Ready (%s) to fight"
 msgstr ""
 
-#: data/pvp/statuses/plague.tres
-msgid "Plague"
-msgstr ""
-
 #: data/pvp/spells/necro_plague_bolt.tres
 msgid "Plague Bolt"
 msgstr ""
@@ -1563,6 +1547,14 @@ msgstr ""
 
 #: scripts/view/hud/unit_card.gd
 msgid "Plays %d / %d"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "Point out (%s)"
+msgstr ""
+
+#: scripts/progression/settings.gd
+msgid "Point out (multiplayer)"
 msgstr ""
 
 #: data/damage_types/poison.tres data/statuses/poison.tres
@@ -1623,10 +1615,6 @@ msgid_plural "Pulls up to %d cells closer"
 msgstr[0] ""
 msgstr[1] ""
 
-#: data/pvp/spells/priest_purify.tres
-msgid "Purify"
-msgstr ""
-
 #: scripts/data/move_effect.gd
 msgid "Pushes back %d cell"
 msgid_plural "Pushes back %d cells"
@@ -1658,7 +1646,7 @@ msgid "QA: playground"
 msgstr ""
 
 #: data/pvp/heroes/monk.tres
-msgid "Quick on its feet: kicks in, pulls enemies close, sweeps them away and recovers on the spot."
+msgid "Quick on its feet: kicks in, pulls enemies close and sweeps them away."
 msgstr ""
 
 #: scripts/game/qa_screen.gd
@@ -1667,6 +1655,10 @@ msgstr ""
 
 #: scenes/game/title_screen.tscn
 msgid "Quit"
+msgstr ""
+
+#: data/pvp/spells/priest_radiance.tres
+msgid "Radiance"
 msgstr ""
 
 #: scripts/view/hud/spell_bar.gd
@@ -1697,7 +1689,7 @@ msgstr ""
 msgid "Ranger"
 msgstr ""
 
-#: scripts/battle/card_rules.gd scripts/data/rune_data.gd
+#: scripts/data/rune_data.gd
 msgid "Rare"
 msgstr ""
 
@@ -1761,10 +1753,6 @@ msgstr ""
 msgid "Regeneration"
 msgstr ""
 
-#: data/pvp/statuses/regrowth.tres
-msgid "Regrowth"
-msgstr ""
-
 #: scripts/game/net/net_lobby_screen.gd
 msgid "Remove"
 msgstr ""
@@ -1789,6 +1777,10 @@ msgstr ""
 msgid "Repulse"
 msgstr ""
 
+#: data/pvp/spells/priest_rescue.tres
+msgid "Rescue"
+msgstr ""
+
 #: scenes/game/settings_screen.tscn
 msgid "Reset keys"
 msgstr ""
@@ -1805,8 +1797,16 @@ msgstr ""
 msgid "Resistance: percent less damage of one type (never more than three quarters for heroes; an enemy can be immune)."
 msgstr ""
 
-#: data/pvp/statuses/robbed.tres
-msgid "Robbed"
+#: data/pvp/spells/spirit_reveal.tres
+msgid "Reveal"
+msgstr ""
+
+#: scripts/data/reveal_effect.gd
+msgid "reveals hidden units"
+msgstr ""
+
+#: data/pvp/spells/goblin_rocket.tres
+msgid "Rocket Jump"
 msgstr ""
 
 #: data/pvp/units/rogue.tres
@@ -1825,16 +1825,12 @@ msgstr ""
 msgid "Room code: %s"
 msgstr ""
 
+#: data/pvp/spells/spirit_root.tres
+msgid "Root"
+msgstr ""
+
 #: data/pvp/statuses/rooted.tres
 msgid "Rooted"
-msgstr ""
-
-#: data/pvp/statuses/rot.tres
-msgid "Rot"
-msgstr ""
-
-#: data/pvp/spells/necro_rot.tres
-msgid "Rot Curse"
 msgstr ""
 
 #: scripts/view/hud.gd
@@ -1917,10 +1913,6 @@ msgstr ""
 msgid "Say something"
 msgstr ""
 
-#: data/pvp/spells/goblin_scamper.tres
-msgid "Scamper"
-msgstr ""
-
 #: scripts/game/net/net_lobby_screen.gd
 msgid "Seconds before the AI replaces a player who left"
 msgstr ""
@@ -1962,15 +1954,11 @@ msgid "Shielded"
 msgstr ""
 
 #: data/pvp/heroes/ranger.tres
-msgid "Shoots from far away, slows and marks targets, and leaps back out of reach. Weak when caught."
+msgid "Shoots from far away, pins a target to the ground and leaps back out of reach. Weak when caught."
 msgstr ""
 
 #: scenes/game/settings_screen.tscn
 msgid "Show hints again"
-msgstr ""
-
-#: data/pvp/heroes/wraith.tres
-msgid "Shrugs off most physical attacks, but holy light burns it. Drains life, chills and terrifies."
 msgstr ""
 
 #: scripts/view/hud.gd
@@ -2013,10 +2001,6 @@ msgstr ""
 msgid "Slingshot"
 msgstr ""
 
-#: data/pvp/statuses/slowed.tres
-msgid "Slowed"
-msgstr ""
-
 #: data/spells/smash.tres
 msgid "Smash"
 msgstr ""
@@ -2031,6 +2015,10 @@ msgstr ""
 
 #: data/pvp/units/sorceress.tres
 msgid "Sorceress"
+msgstr ""
+
+#: data/pvp/spells/necro_soul_pull.tres
+msgid "Soul Pull"
 msgstr ""
 
 #: data/pvp/spells/wraith_touch.tres
@@ -2089,8 +2077,8 @@ msgstr ""
 msgid "Spells that hurt (damage, harmful statuses) also hit your own team, and you can hit yourself with an area. Off: they only hit enemies."
 msgstr ""
 
-#: data/pvp/heroes/wraith.tres
-msgid "Spirit"
+#: scripts/game/net/net_lobby_screen.gd
+msgid "Spirits"
 msgstr ""
 
 #: data/spells/spore_bolt.tres
@@ -2321,6 +2309,10 @@ msgstr ""
 msgid "the match refused you"
 msgstr ""
 
+#: data/pvp/heroes/priestess.tres
+msgid "The only healer: mends her allies and pulls them out of danger. Her holy light burns whoever comes close. She cannot heal herself."
+msgstr ""
+
 #: scripts/run/run_director.gd
 msgid "The party is fully healed."
 msgstr ""
@@ -2335,6 +2327,10 @@ msgstr ""
 
 #: scripts/game/game.gd
 msgid "The tower is invalid: %s"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "Then click a cell or a unit: your team sees a mark there. Faster: the key, with the mouse over it"
 msgstr ""
 
 #: scripts/game/qa_screen.gd
@@ -2413,10 +2409,6 @@ msgstr ""
 msgid "UI scale"
 msgstr ""
 
-#: scripts/battle/card_rules.gd
-msgid "Uncommon"
-msgstr ""
-
 #: scenes/battle/hud/unit_card.tscn
 msgid "Unit"
 msgstr ""
@@ -2471,10 +2463,6 @@ msgstr ""
 
 #: data/units/warg.tres
 msgid "Warg"
-msgstr ""
-
-#: data/pvp/heroes/necromancer.tres
-msgid "Wears enemies down with poison and rot, roots them, slows them and steals their action points. Little burst, no healing."
 msgstr ""
 
 #: scripts/progression/tutorial.gd
@@ -2589,6 +2577,18 @@ msgstr ""
 msgid "Your player"
 msgstr ""
 
+#: scripts/net/net_battle_controller.gd
+msgid "Your spirit's turn!"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "Your spirit: one spell anywhere on the board (%s), or pass (%s)"
+msgstr ""
+
 #: scripts/game/net/net_lobby_screen.gd
 msgid "your team"
+msgstr ""
+
+#: scripts/net/net_battle_controller.gd
+msgid "Your turn!"
 msgstr ""

@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://dhohe0py4dpcn" path="res://assets/audio/sfx/cast_poison.ogg" id="sfx_cast_poison"]
 [ext_resource type="AudioStream" uid="uid://dgy184mk0vla2" path="res://assets/audio/sfx/death.ogg" id="sfx_death"]
 [ext_resource type="AudioStream" uid="uid://ce6b162op25pb" path="res://assets/audio/sfx/victory.wav" id="sfx_victory"]
+[ext_resource type="AudioStream" uid="uid://s2opfbvtxure" path="res://assets/audio/sfx/turn_warning.ogg" id="sfx_turn_warning"]
 [ext_resource type="AudioStream" uid="uid://dj25x5dwa7ofl" path="res://assets/audio/music/hub.mp3" id="music_hub"]
 [ext_resource type="AudioStream" uid="uid://ckrs3hepmfyyd" path="res://assets/audio/music/battle.mp3" id="music_battle"]
 [ext_resource type="AudioStream" uid="uid://c6vdl3x73qnvf" path="res://assets/audio/music/boss.mp3" id="music_boss"]
@@ -31,7 +32,8 @@ sfx = Dictionary[StringName, AudioStream]({
 &"cast_physical": ExtResource("sfx_cast_physical"),
 &"cast_poison": ExtResource("sfx_cast_poison"),
 &"death": ExtResource("sfx_death"),
-&"victory": ExtResource("sfx_victory")
+&"victory": ExtResource("sfx_victory"),
+&"turn_warning": ExtResource("sfx_turn_warning")
 })
 music = Dictionary[StringName, AudioStream]({
 &"hub": ExtResource("music_hub"),

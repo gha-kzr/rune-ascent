@@ -1,5 +1,5 @@
 extends TestCase
-## Card combat: spells become a deck, a hand of four is drawn each turn, at most two cards are played (a play is an
+## Card combat: spells become a deck (two copies of each), a hand of four is drawn each turn, at most two cards are played (a play is an
 ## AP), unplayed cards stay or are thrown away, and every peer deals and replays the same cards.
 
 
@@ -28,22 +28,13 @@ func _slot(unit: UnitState, spell_name: String) -> int:
 	return -1
 
 
-func test_a_deck_holds_more_copies_of_cheap_spells_than_of_costly_ones() -> void:
-	var knight := PvpHeroes.build(0)["unit"] as UnitData
-	var deck := CardRules.deck_for(knight)
-	for slot in knight.spells.size():
-		assert_eq(deck.count(slot), CardRules.copies(knight.spells[slot]), knight.spells[slot].display_name)
-	var cheapest := 0
-	var priciest := 0
-	for slot in knight.spells.size():
-		if CardRules.weight(knight.spells[slot]) < CardRules.weight(knight.spells[cheapest]):
-			cheapest = slot
-		if CardRules.weight(knight.spells[slot]) > CardRules.weight(knight.spells[priciest]):
-			priciest = slot
-	assert_true(deck.count(cheapest) > deck.count(priciest), "the common spell is dealt more often than the rare one")
+func test_a_deck_holds_every_spell_twice() -> void:
 	for hero in PvpHeroes.hero_count():
 		var unit := PvpHeroes.build(hero)["unit"] as UnitData
-		assert_true(CardRules.deck_for(unit).size() >= CardRules.HAND_SIZE + 2, "%s: a deck deeper than a hand" % unit.display_name)
+		var deck := CardRules.deck_for(unit)
+		for slot in unit.spells.size():
+			assert_eq(deck.count(slot), CardRules.COPIES_PER_SPELL, "%s: %s" % [unit.display_name, unit.spells[slot].display_name])
+		assert_true(deck.size() >= CardRules.HAND_SIZE + 2, "%s: a deck deeper than a hand" % unit.display_name)
 
 
 func test_every_unit_starts_with_a_full_hand_and_two_plays() -> void:
@@ -146,7 +137,7 @@ func test_discarding_is_free_and_only_cards_in_hand_can_be_thrown() -> void:
 	assert_false(battle.perform(BattleActions.DiscardCard.new(1 - unit.id, 0)).ok(), "not your turn")
 
 
-func test_the_hand_is_refilled_at_the_next_turn_and_kept_cards_stay() -> void:
+func test_the_hand_is_refilled_at_the_end_of_the_turn_and_kept_cards_stay() -> void:
 	var state := _duel()
 	var battle := _started(state)
 	var unit := state.current_unit()
@@ -154,6 +145,7 @@ func test_the_hand_is_refilled_at_the_next_turn_and_kept_cards_stay() -> void:
 	var thrown: int = kept.pop_front()
 	battle.perform(BattleActions.DiscardCard.new(unit.id, thrown))
 	battle.perform(BattleActions.EndTurn.new(unit.id))
+	assert_eq(unit.hand.size(), CardRules.HAND_SIZE, "refilled as the turn ends, to be read during the others' turns")
 	battle.perform(BattleActions.EndTurn.new(state.current_unit().id))
 	assert_eq(state.current_unit().id, unit.id, "back to the first unit")
 	assert_eq(unit.hand.size(), CardRules.HAND_SIZE, "hand refilled")

@@ -50,6 +50,12 @@ var positioning: Positioning
 ## Name shown in the HUD, e.g. "Brute Lv 5 · Elite".
 var label := ""
 var visual_scale := 1.0
+## Multiplayer spirits (BattleState.spirit_kit): the unit fell and acts on as a spirit, on its own turn, with one action
+## and the spirit's spells in place of its own (`data` is then a copy of its UnitData holding them).
+var spirit := false
+
+## A spirit's actions a turn.
+const SPIRIT_ACTIONS := 1
 
 
 func _init(unit_id: int, unit_data: UnitData, unit_team: Team, start_cell: Vector2i) -> void:
@@ -67,13 +73,37 @@ func is_alive() -> bool:
 	return hp > 0
 
 
+## Whether it takes turns: alive, or a spirit.
+func can_act() -> bool:
+	return is_alive() or spirit
+
+
+## The unit has fallen and goes on as a spirit: its spells become `kit`, one action a turn, no move, no status left.
+## In card combat its hand is the whole kit, every turn (start_turn).
+func become_spirit(kit: Array[SpellData]) -> void:
+	spirit = true
+	var spirit_data := data.duplicate() as UnitData
+	spirit_data.spells = kit.duplicate()
+	spirit_data.mp = 0
+	data = spirit_data
+	statuses.clear()
+	cooldowns.clear()
+	commit_position()
+	ap = 0
+	mp = 0
+	if card_mode:
+		hand.assign(range(kit.size()))
+		draw_pile.clear()
+		discard_pile.clear()
+
+
 ## Refills AP and MP, modifiers included. Called when the unit's turn starts.
 func start_turn() -> void:
 	ap = max_ap()
 	mp = max_mp()
 	commit_position()
-	if card_mode:
-		draw_hand()
+	if spirit and card_mode:
+		hand.assign(range(data.spells.size()))  # The whole kit again: what it didn't play last turn was thrown away.
 	for spell: SpellData in cooldowns.keys():
 		cooldowns[spell] -= 1
 		if cooldowns[spell] <= 0:
@@ -205,6 +235,8 @@ func max_resistance_percent() -> int:
 
 
 func max_ap() -> int:
+	if spirit:
+		return SPIRIT_ACTIONS
 	return maxi(0, (CardRules.PLAYS_PER_TURN if card_mode else data.ap) + stat_bonus(StatModifier.Stat.AP))
 
 
@@ -296,4 +328,5 @@ func clone() -> UnitState:
 	copy.role = role
 	copy.positioning = positioning
 	copy.visual_scale = visual_scale
+	copy.spirit = spirit
 	return copy

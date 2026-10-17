@@ -7,7 +7,7 @@ Date: 2026-10-07. Status: first version, PvP only.
 An optional rule set for a PvP match, switched in the lobby by the host (`cfg cards`). Each hero's spells become a deck:
 
 - a **card** is one cast of a spell; the deck holds 1 to 3 copies of each spell by **rarity** (`CardRules`): the weight of a spell is its AP cost plus 2 for a cooldown of 2 or more (1 for "once per turn"); weight up to 2 is common (3 copies), up to 4 uncommon (2), more rare (1). decks hold 8 to 11 cards (the Knight's: Guard x3, Slash, Shield Bash and Whirlwind x2, Charge x1), so a rare spell comes up about a third as often as a common one;
-- each turn the hero **draws up to four cards** and may **play two**: a play is an action point (`max_ap()` is 2 plus the AP modifiers), so Blessing (+1 AP) is a third play and Pickpocket / Drain Will steal one;
+- each turn the hero **draws up to four cards** (since 2026-10-16 at the end of its turn, not the start: players asked to read their next hand while the others play) and may **play two**: a play is an action point (`max_ap()` is 2 plus the AP modifiers), so Blessing (+1 AP) is a third play and Pickpocket / Drain Will steal one;
 - cards not played **stay** in the hand; any card can be **thrown away** for free, at any time in the turn (the X on the card or a right click); played and thrown cards go to the discard pile, which is shuffled back when the draw pile is empty;
 - AP costs and cooldowns are not used any more; movement (MP) is unchanged;
 - the hand is shown at the bottom of the screen in place of the spell bar, with the draw and discard pile sizes; hovering a card shows what the spell does, its rarity and how many of the deck's cards it is.

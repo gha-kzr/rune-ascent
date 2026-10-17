@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://cnx3een0a7y1a"]
+
+[ext_resource type="Script" uid="uid://c3ver5nvrb4u0" path="res://scripts/data/area_shape.gd" id="1_qy46g"]
+[ext_resource type="Script" uid="uid://cjmipqynhkat1" path="res://scripts/data/effect_data.gd" id="2_t26nk"]
+[ext_resource type="Script" uid="uid://cq12oalhu55my" path="res://scripts/data/move_effect.gd" id="3_8bis1"]
+[ext_resource type="Texture2D" uid="uid://cffcusprbpnlt" path="res://ui/icons/grapple_shot.svg" id="4_ntu3a"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="5_wus8d"]
+
+[sub_resource type="Resource" id="Resource_tbdwv"]
+script = ExtResource("1_qy46g")
+
+[sub_resource type="Resource" id="Resource_rxplj"]
+script = ExtResource("3_8bis1")
+kind = 4
+distance = 3
+target_filter = 1
+
+[resource]
+script = ExtResource("5_wus8d")
+display_name = "Rescue"
+icon = ExtResource("4_ntu3a")
+ap_cost = 1
+min_range = 2
+max_range = 5
+target_unit = 2
+area = SubResource("Resource_tbdwv")
+effects = Array[ExtResource("2_t26nk")]([SubResource("Resource_rxplj")])

@@ -540,6 +540,38 @@ func test_a_nonce_must_be_the_senders_and_a_flood_is_slowed_down() -> void:
 	assert_eq(rig.sessions[1].state.seats[3].hero, 2, "and a calm player is fine again")
 
 
+func test_the_clock_gives_back_the_playback_once_and_only_to_the_turns_player() -> void:
+	var rig := _rig(2, 1)
+	_go(rig)
+	var turn := float(rig.sessions[1].state.settings["turn"])
+	var seat := rig.sessions[1].state.current_seat()
+	var other := 2 if seat == 1 else 1
+	var unit := rig.sessions[1].unit_of(seat)
+	rig.run(4.0)
+	rig.sessions[other].turn_shown(unit)  # Not their hero: nothing.
+	rig.net.flush()
+	assert_true(rig.sessions[1].turn_seconds_left() < turn - 3.0, "no time given back")
+	rig.sessions[seat].turn_shown(unit)
+	rig.net.flush()
+	for id in [1, 2]:
+		assert_true(rig.sessions[id].turn_seconds_left() > turn - 0.5, "the playback is given back, on every screen (%d)" % id)
+	rig.run(15.0)
+	rig.sessions[seat].turn_shown(unit)
+	rig.net.flush()
+	assert_true(rig.sessions[1].turn_seconds_left() < turn - 14.0, "once per turn")
+
+
+func test_the_clock_gives_back_at_most_the_playback_credit() -> void:
+	var rig := _rig(2, 1)
+	_go(rig)
+	var seat := rig.sessions[1].state.current_seat()
+	rig.run(15.0)
+	rig.sessions[seat].turn_shown(rig.sessions[1].unit_of(seat))
+	rig.net.flush()
+	var expected := float(rig.sessions[1].state.settings["turn"]) - (15.0 - MatchSession.PLAYBACK_CREDIT)
+	assert_true(absf(rig.sessions[1].turn_seconds_left() - expected) < 0.5, "%f, %f" % [rig.sessions[1].turn_seconds_left(), expected])
+
+
 func test_guests_count_the_turn_down_too() -> void:
 	var rig := _rig(2, 1)
 	_go(rig)
@@ -598,3 +630,17 @@ func test_only_the_host_changes_friendly_fire_and_only_to_a_flag() -> void:
 	rig.net.flush()
 	assert_true(rig.sessions[1].state.settings["friendly_fire"], "a guest's change is refused")
 	assert_eq(rig.sessions[1].state.apply({"k": "cfg", "f": "friendly_fire", "v": "no"}), "bad flag")
+
+
+func test_marks_reach_everyone_at_a_calm_pace_and_bad_ones_are_dropped() -> void:
+	var rig := _rig(2, 1)
+	var got: Array = []
+	rig.sessions[1].mark_received.connect(func(seat: int, cell: Vector2i) -> void: got.append([seat, cell]))
+	rig.sessions[2].send_mark(Vector2i(3, 4))
+	rig.sessions[2].send_mark(Vector2i(3, 5))  # Too soon.
+	rig.net.flush()
+	assert_eq(got, [[2, Vector2i(3, 4)]])
+	rig.run(MatchSession.MARK_COOLDOWN + 0.1)
+	rig.sessions[2].send_mark(Vector2i(-1, 4))
+	rig.net.flush()
+	assert_eq(got.size(), 1, "off the board: dropped")

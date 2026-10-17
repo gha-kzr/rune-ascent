@@ -19,7 +19,7 @@ target_filter = 3
 
 [sub_resource type="Resource" id="Resource_46v6h"]
 script = ExtResource("5_uw6i8")
-min_amount = 10
+min_amount = 11
 max_amount = 14
 damage_type = ExtResource("4_q8bhb")
 target_filter = 2
@@ -29,7 +29,7 @@ script = ExtResource("7_5vd8s")
 display_name = "Flying Kick"
 icon = ExtResource("6_cseyf")
 cast_animation = &"Attack"
-cooldown = 2
+ap_cost = 1
 min_range = 2
 max_range = 4
 needs_line_of_sight = false

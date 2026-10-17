@@ -1,17 +1,22 @@
 [gd_resource type="Resource" script_class="PvpRoster" format=3 uid="uid://d34ff3rvtu4hp"]
 
-[ext_resource type="Script" uid="uid://bkpmljkvekcmc" path="res://scripts/data/pvp_hero.gd" id="1_h65v2"]
-[ext_resource type="Resource" uid="uid://concumo2b3nly" path="res://data/pvp/heroes/knight.tres" id="2_5rqap"]
-[ext_resource type="Resource" uid="uid://b0fqslfopc684" path="res://data/pvp/heroes/ranger.tres" id="3_wet10"]
-[ext_resource type="Resource" uid="uid://bmv6qfyoa15s" path="res://data/pvp/heroes/sorceress.tres" id="4_4h3sj"]
-[ext_resource type="Resource" uid="uid://ciej7gsknbgwj" path="res://data/pvp/heroes/necromancer.tres" id="5_ojcei"]
-[ext_resource type="Resource" uid="uid://dre2c7q4qyvxi" path="res://data/pvp/heroes/rogue.tres" id="6_qx1f1"]
-[ext_resource type="Resource" uid="uid://dwvci4ujxe20n" path="res://data/pvp/heroes/priestess.tres" id="7_ttelh"]
-[ext_resource type="Resource" uid="uid://vyoryst87ii0" path="res://data/pvp/heroes/goblin.tres" id="8_bclhd"]
-[ext_resource type="Resource" uid="uid://bsum0p2e4gpky" path="res://data/pvp/heroes/wraith.tres" id="9_8a34e"]
-[ext_resource type="Resource" uid="uid://dxbotpbi03s6c" path="res://data/pvp/heroes/monk.tres" id="10_cn1y5"]
-[ext_resource type="Script" uid="uid://c21yimk2kwc8i" path="res://scripts/data/pvp_roster.gd" id="11_hfp0t"]
+[ext_resource type="Script" uid="uid://bkpmljkvekcmc" path="res://scripts/data/pvp_hero.gd" id="1_ojcei"]
+[ext_resource type="Resource" uid="uid://concumo2b3nly" path="res://data/pvp/heroes/knight.tres" id="2_qx1f1"]
+[ext_resource type="Resource" uid="uid://b0fqslfopc684" path="res://data/pvp/heroes/ranger.tres" id="3_ttelh"]
+[ext_resource type="Resource" uid="uid://bmv6qfyoa15s" path="res://data/pvp/heroes/sorceress.tres" id="4_bclhd"]
+[ext_resource type="Resource" uid="uid://ciej7gsknbgwj" path="res://data/pvp/heroes/necromancer.tres" id="5_8a34e"]
+[ext_resource type="Resource" uid="uid://dre2c7q4qyvxi" path="res://data/pvp/heroes/rogue.tres" id="6_cn1y5"]
+[ext_resource type="Resource" uid="uid://dwvci4ujxe20n" path="res://data/pvp/heroes/priestess.tres" id="7_hfp0t"]
+[ext_resource type="Resource" uid="uid://vyoryst87ii0" path="res://data/pvp/heroes/goblin.tres" id="8_7s4cy"]
+[ext_resource type="Resource" uid="uid://bsum0p2e4gpky" path="res://data/pvp/heroes/wraith.tres" id="9_ngncl"]
+[ext_resource type="Resource" uid="uid://dxbotpbi03s6c" path="res://data/pvp/heroes/monk.tres" id="10_26nx2"]
+[ext_resource type="Script" uid="uid://c21yimk2kwc8i" path="res://scripts/data/pvp_roster.gd" id="11_hdehh"]
+[ext_resource type="Script" uid="uid://5hf4pclcl7xg" path="res://scripts/data/spell_data.gd" id="12_2e4px"]
+[ext_resource type="Resource" uid="uid://bu4faj0hrg8pf" path="res://data/pvp/spells/spirit_curse.tres" id="13_no3i7"]
+[ext_resource type="Resource" uid="uid://d0iocx6riqj8n" path="res://data/pvp/spells/spirit_root.tres" id="14_wxhh3"]
+[ext_resource type="Resource" uid="uid://bugm4mfp4diep" path="res://data/pvp/spells/spirit_reveal.tres" id="15_omy4m"]
 
 [resource]
-script = ExtResource("11_hfp0t")
-heroes = Array[ExtResource("1_h65v2")]([ExtResource("2_5rqap"), ExtResource("3_wet10"), ExtResource("4_4h3sj"), ExtResource("5_ojcei"), ExtResource("6_qx1f1"), ExtResource("7_ttelh"), ExtResource("8_bclhd"), ExtResource("9_8a34e"), ExtResource("10_cn1y5")])
+script = ExtResource("11_hdehh")
+heroes = Array[ExtResource("1_ojcei")]([ExtResource("2_qx1f1"), ExtResource("3_ttelh"), ExtResource("4_bclhd"), ExtResource("5_8a34e"), ExtResource("6_cn1y5"), ExtResource("7_hfp0t"), ExtResource("8_7s4cy"), ExtResource("9_ngncl"), ExtResource("10_26nx2")])
+spirit_spells = Array[ExtResource("12_2e4px")]([ExtResource("13_no3i7"), ExtResource("14_wxhh3"), ExtResource("15_omy4m")])

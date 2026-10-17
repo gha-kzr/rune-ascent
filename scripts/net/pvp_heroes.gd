@@ -77,15 +77,29 @@ static func signature() -> int:
 			for modifier in unit.innate_modifiers:
 				line += "|%s" % _modifier_text(modifier)
 			for spell in unit.spells:
-				line += "|%s,%d,%d,%d-%d,%s,%s,%d,%d" % [spell.display_name, spell.ap_cost, spell.cooldown, spell.min_range,
-						spell.max_range, spell.needs_line_of_sight, spell.height_extends_range, spell.target_unit,
-						spell.area.kind * 10 + spell.area.size]
-				for effect in spell.effects:
-					line += ",{%s}" % _effect_text(effect)
+				line += _spell_text(spell)
 			parts.append(line)
-		parts.append("cards|%d|%d|%s" % [CardRules.HAND_SIZE, CardRules.PLAYS_PER_TURN, CardRules.COPIES])
+		var spirit := "spirit"
+		for spell in roster().spirit_spells:
+			spirit += _spell_text(spell)
+		parts.append(spirit)
+		parts.append("cards|%d|%d|%s" % [CardRules.HAND_SIZE, CardRules.PLAYS_PER_TURN, CardRules.COPIES_PER_SPELL])
 		_signature = maxi(1, "\n".join(parts).hash())
 	return _signature
+
+
+## What a spirit casts when the lobby's Spirits rule is on.
+static func spirit_kit() -> Array[SpellData]:
+	return roster().spirit_spells
+
+
+static func _spell_text(spell: SpellData) -> String:
+	var text := "|%s,%d,%d,%d-%d,%s,%s,%d,%d" % [spell.display_name, spell.ap_cost, spell.cooldown, spell.min_range,
+			spell.max_range, spell.needs_line_of_sight, spell.height_extends_range, spell.target_unit,
+			spell.area.kind * 10 + spell.area.size]
+	for effect in spell.effects:
+		text += ",{%s}" % _effect_text(effect)
+	return text
 
 
 static func _modifier_text(modifier: StatModifier) -> String:
@@ -105,7 +119,8 @@ static func _effect_text(effect: EffectData) -> String:
 		text += ":%d" % (effect as CleanseEffect).remove
 	elif effect is ApplyStatusEffect:
 		var status := (effect as ApplyStatusEffect).status
-		text += ":%s:%d:%s:%s" % [status.display_name, status.duration, status.stealth, status.is_positive]
+		text += ":%s:%d:%s:%s:%s" % [status.display_name, status.duration, status.stealth, status.is_positive,
+				(effect as ApplyStatusEffect).exclusive]
 		for modifier in status.modifiers:
 			text += ":" + _modifier_text(modifier)
 		for tick in status.tick_effects:
